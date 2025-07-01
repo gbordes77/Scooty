@@ -1,0 +1,568 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guide Administrateur - Scooty MTG Bot</title>
+    <style>
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 0;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+            background: rgba(255, 255, 255, 0.95);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            border-radius: 20px;
+            margin-top: 40px;
+            margin-bottom: 40px;
+        }
+
+        .header {
+            background: linear-gradient(135deg, #DC2626, #EF4444);
+            color: white;
+            padding: 40px;
+            border-radius: 20px 20px 0 0;
+            text-align: center;
+            margin: -20px -20px 40px -20px;
+        }
+
+        .header h1 {
+            margin: 0;
+            font-size: 3em;
+            font-weight: 800;
+            text-shadow: 0 4px 8px rgba(0,0,0,0.3);
+        }
+
+        .header p {
+            margin: 10px 0 0 0;
+            font-size: 1.3em;
+            opacity: 0.9;
+        }
+
+        .section {
+            margin: 40px 0;
+            padding: 30px;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.05);
+        }
+
+        .section h2 {
+            color: #DC2626;
+            font-size: 2.2em;
+            font-weight: 700;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 3px solid #E5E7EB;
+        }
+
+        .admin-card {
+            background: linear-gradient(135deg, #FEF2F2, #FEE2E2);
+            padding: 25px;
+            border-radius: 12px;
+            margin: 25px 0;
+            border-left: 5px solid #DC2626;
+        }
+
+        .command-demo {
+            background: #F3F4F6;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 15px 0;
+            font-family: 'Courier New', monospace;
+            border-left: 4px solid #DC2626;
+        }
+
+        .feature-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin: 30px 0;
+        }
+
+        .feature-card {
+            background: white;
+            padding: 25px;
+            border-radius: 12px;
+            box-shadow: 0 8px 25px rgba(0,0,0,0.08);
+            border-top: 4px solid #DC2626;
+        }
+
+        .feature-card h3 {
+            color: #DC2626;
+            font-size: 1.5em;
+            margin-bottom: 15px;
+        }
+
+        .warning {
+            background: #FEF2F2;
+            border: 1px solid #FECACA;
+            padding: 20px;
+            border-radius: 12px;
+            margin: 20px 0;
+        }
+
+        .warning::before {
+            content: "⚠️ ";
+            font-size: 1.2em;
+        }
+
+        .success {
+            background: #F0FDF4;
+            border: 1px solid #BBF7D0;
+            padding: 20px;
+            border-radius: 12px;
+            margin: 20px 0;
+        }
+
+        .success::before {
+            content: "✅ ";
+            font-size: 1.2em;
+        }
+
+        .info {
+            background: #EFF6FF;
+            border: 1px solid #BFDBFE;
+            padding: 20px;
+            border-radius: 12px;
+            margin: 20px 0;
+        }
+
+        .info::before {
+            content: "ℹ️ ";
+            font-size: 1.2em;
+        }
+
+        code {
+            background: #F3F4F6;
+            padding: 3px 8px;
+            border-radius: 6px;
+            font-family: 'Courier New', monospace;
+            color: #374151;
+        }
+
+        .config-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        .config-table th,
+        .config-table td {
+            border: 1px solid #E5E7EB;
+            padding: 12px;
+            text-align: left;
+        }
+
+        .config-table th {
+            background: #F9FAFB;
+            font-weight: 600;
+            color: #374151;
+        }
+
+        .permissions-list {
+            background: #F8FAFC;
+            padding: 20px;
+            border-radius: 8px;
+            margin: 15px 0;
+        }
+
+        .permissions-list ul {
+            list-style-type: none;
+            padding: 0;
+        }
+
+        .permissions-list li {
+            padding: 8px 0;
+            border-bottom: 1px solid #E5E7EB;
+            display: flex;
+            align-items: center;
+        }
+
+        .permissions-list li:last-child {
+            border-bottom: none;
+        }
+
+        .permissions-list li::before {
+            content: "🔑";
+            margin-right: 10px;
+        }
+
+        .back-link {
+            display: inline-block;
+            margin-top: 30px;
+            padding: 12px 24px;
+            background: #DC2626;
+            color: white;
+            text-decoration: none;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: background 0.3s;
+        }
+
+        .back-link:hover {
+            background: #B91C1C;
+        }
+
+        .step-counter {
+            background: #DC2626;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 15px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>⚙️ Guide Administrateur</h1>
+            <p>Scooty MTG Bot - Administration & Configuration</p>
+        </div>
+
+        <div class="section">
+            <h2>🚀 Installation & Configuration</h2>
+            
+            <div class="admin-card">
+                <h3>Prérequis</h3>
+                <ul>
+                    <li>Serveur Discord avec permissions administrateur</li>
+                    <li>Compte Supabase (base de données)</li>
+                    <li>Compte Fly.io ou serveur pour l'hébergement</li>
+                    <li>Token Discord Bot</li>
+                </ul>
+            </div>
+
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h3><span class="step-counter">1</span>Bot Discord</h3>
+                    <p>Créer l'application Discord et configurer le bot</p>
+                    <div class="command-demo">
+                        # Aller sur https://discord.com/developers/applications
+                        # Créer une nouvelle application
+                        # Bot → Reset Token → Copier le token
+                    </div>
+                </div>
+
+                <div class="feature-card">
+                    <h3><span class="step-counter">2</span>Base de Données</h3>
+                    <p>Configurer Supabase et créer les tables</p>
+                    <div class="command-demo">
+                        # Créer projet sur https://supabase.com
+                        # SQL Editor → Exécuter schema.sql
+                        # Settings → API → Copier les clés
+                    </div>
+                </div>
+
+                <div class="feature-card">
+                    <h3><span class="step-counter">3</span>Variables d'Environnement</h3>
+                    <p>Configurer le fichier .env</p>
+                    <div class="command-demo">
+                        DISCORD_TOKEN=votre_token_discord
+                        SUPABASE_URL=https://xxx.supabase.co
+                        SUPABASE_SERVICE_ROLE_KEY=votre_key
+                    </div>
+                </div>
+
+                <div class="feature-card">
+                    <h3><span class="step-counter">4</span>Déploiement</h3>
+                    <p>Déployer sur Fly.io</p>
+                    <div class="command-demo">
+                        fly auth login
+                        fly deploy
+                        fly logs
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🔑 Permissions Discord</h2>
+            
+            <div class="permissions-list">
+                <h3>Permissions Requises</h3>
+                <ul>
+                    <li>Send Messages - Envoyer des messages de réponse</li>
+                    <li>Use Slash Commands - Utiliser les commandes slash</li>
+                    <li>Embed Links - Créer des embeds riches</li>
+                    <li>Read Message History - Lire l'historique des messages</li>
+                    <li>Add Reactions - Ajouter des réactions aux messages</li>
+                    <li>Manage Messages - Gérer les messages (optionnel)</li>
+                </ul>
+            </div>
+
+            <div class="warning">
+                <strong>Important :</strong> Le bot fonctionne entièrement en messages privés (ephemeral). Il n'a pas besoin d'accès aux channels publics pour le scouting.
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>⚙️ Commandes Administrateur</h2>
+
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h3>🏆 /admin create-event</h3>
+                    <p><strong>Fonction :</strong> Créer un nouveau tournoi</p>
+                    <p><strong>Paramètres :</strong></p>
+                    <ul>
+                        <li><strong>name</strong> - Nom du tournoi (obligatoire)</li>
+                        <li><strong>rounds</strong> - Nombre de rondes (optionnel, défaut: 5)</li>
+                    </ul>
+                    <div class="command-demo">
+                        /admin create-event name:GP Paris 2024 rounds:8
+                    </div>
+                </div>
+
+                <div class="feature-card">
+                    <h3>🎴 /admin archetype</h3>
+                    <p><strong>Fonction :</strong> Gérer les archétypes disponibles</p>
+                    <p><strong>Actions :</strong></p>
+                    <ul>
+                        <li><strong>add</strong> - Ajouter un nouvel archétype</li>
+                        <li><strong>remove</strong> - Désactiver un archétype</li>
+                        <li><strong>list</strong> - Lister tous les archétypes</li>
+                    </ul>
+                    <div class="command-demo">
+                        /admin archetype action:add name:Dredge emoji:⚫🟢
+                    </div>
+                </div>
+            </div>
+
+            <div class="info">
+                <strong>Note :</strong> Seuls les utilisateurs avec le rôle administrateur peuvent utiliser ces commandes. Configurez les permissions dans Discord.
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>📊 Configuration des Channels</h2>
+
+            <table class="config-table">
+                <thead>
+                    <tr>
+                        <th>Variable</th>
+                        <th>Description</th>
+                        <th>Obligatoire</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><code>GUILD_ID</code></td>
+                        <td>ID du serveur Discord</td>
+                        <td>✅ Oui</td>
+                    </tr>
+                    <tr>
+                        <td><code>LIVE_CHANNEL_ID</code></td>
+                        <td>Channel pour le feed live (optionnel)</td>
+                        <td>❌ Non</td>
+                    </tr>
+                    <tr>
+                        <td><code>ADMIN_CHANNEL_ID</code></td>
+                        <td>Channel pour les logs administrateur</td>
+                        <td>❌ Non</td>
+                    </tr>
+                    <tr>
+                        <td><code>ANNOUNCEMENT_CHANNEL_ID</code></td>
+                        <td>Channel pour les annonces</td>
+                        <td>❌ Non</td>
+                    </tr>
+                </tbody>
+            </table>
+
+            <div class="success">
+                <strong>Conseil :</strong> Configurez au minimum le GUILD_ID. Les autres channels sont optionnels mais recommandés pour une meilleure expérience.
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>📈 Monitoring & Logs</h2>
+
+            <div class="admin-card">
+                <h3>Surveillance du Bot</h3>
+                <p>Le bot dispose de plusieurs systèmes de monitoring :</p>
+                <ul>
+                    <li><strong>Health Check :</strong> <code>http://votre-bot.fly.dev/health</code></li>
+                    <li><strong>Logs JSON :</strong> Tous les événements sont loggés en format structuré</li>
+                    <li><strong>Métriques :</strong> Statistiques d'utilisation disponibles via <code>/stats</code></li>
+                </ul>
+            </div>
+
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h3>📋 Logs Importants</h3>
+                    <ul>
+                        <li>Scouts enregistrés avec détails</li>
+                        <li>Erreurs de base de données</li>
+                        <li>Conflits de scouting détectés</li>
+                        <li>Commandes administrateur utilisées</li>
+                    </ul>
+                </div>
+
+                <div class="feature-card">
+                    <h3>🔍 Commandes de Debug</h3>
+                    <div class="command-demo">
+                        # Voir les logs en temps réel
+                        fly logs
+                        
+                        # Logs avec filtre
+                        fly logs --app scooty-bot
+                        
+                        # Status de l'application
+                        fly status
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🗄️ Gestion de la Base de Données</h2>
+
+            <div class="admin-card">
+                <h3>Opérations Courantes</h3>
+                <p>Commandes SQL utiles pour l'administration :</p>
+            </div>
+
+            <div class="command-demo">
+-- Voir tous les scouts du tournoi actif
+SELECT s.*, e.name as event_name 
+FROM scouts s 
+JOIN events e ON s.event_id = e.id 
+WHERE e.status = 'active';
+
+-- Statistiques par archétype
+SELECT archetype, COUNT(*) as count 
+FROM scouts s
+JOIN events e ON s.event_id = e.id
+WHERE e.status = 'active'
+GROUP BY archetype 
+ORDER BY count DESC;
+
+-- Top contributeurs
+SELECT scout_by, COUNT(*) as scouts_count
+FROM scouts s
+JOIN events e ON s.event_id = e.id
+WHERE e.status = 'active'
+GROUP BY scout_by
+ORDER BY scouts_count DESC;
+
+-- Nettoyer les anciens événements
+UPDATE events 
+SET status = 'completed' 
+WHERE status = 'active' 
+AND start_date < NOW() - INTERVAL '7 days';
+            </div>
+
+            <div class="warning">
+                <strong>Attention :</strong> Toujours faire une sauvegarde avant d'exécuter des commandes de modification en base.
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🚨 Résolution de Problèmes</h2>
+
+            <div class="feature-grid">
+                <div class="feature-card">
+                    <h3>❌ Bot Hors Ligne</h3>
+                    <p><strong>Diagnostic :</strong></p>
+                    <ul>
+                        <li>Vérifier <code>fly status</code></li>
+                        <li>Consulter <code>fly logs</code></li>
+                        <li>Vérifier les variables d'environnement</li>
+                    </ul>
+                </div>
+
+                <div class="feature-card">
+                    <h3>🗄️ Erreurs Base de Données</h3>
+                    <p><strong>Solutions :</strong></p>
+                    <ul>
+                        <li>Vérifier la connexion Supabase</li>
+                        <li>Contrôler les permissions RLS</li>
+                        <li>Vérifier que les tables existent</li>
+                    </ul>
+                </div>
+
+                <div class="feature-card">
+                    <h3>🔧 Commandes ne Répondent Pas</h3>
+                    <p><strong>Causes Possibles :</strong></p>
+                    <ul>
+                        <li>Permissions Discord incorrectes</li>
+                        <li>Commandes non synchronisées</li>
+                        <li>GUILD_ID incorrect</li>
+                    </ul>
+                </div>
+
+                <div class="feature-card">
+                    <h3>⚡ Performance Dégradée</h3>
+                    <p><strong>Optimisations :</strong></p>
+                    <ul>
+                        <li>Vérifier l'usage mémoire avec <code>fly status</code></li>
+                        <li>Nettoyer les anciens événements</li>
+                        <li>Optimiser les requêtes lentes</li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>🔒 Sécurité & Bonnes Pratiques</h2>
+
+            <div class="warning">
+                <strong>Sécurité Critique :</strong>
+                <ul>
+                    <li>Ne jamais partager les tokens Discord ou clés Supabase</li>
+                    <li>Utiliser les variables d'environnement, jamais le code</li>
+                    <li>Configurer les permissions Discord au minimum nécessaire</li>
+                    <li>Surveiller les logs pour détecter des usages anormaux</li>
+                </ul>
+            </div>
+
+            <div class="success">
+                <strong>Recommandations :</strong>
+                <ul>
+                    <li>Faire des sauvegardes régulières de la base de données</li>
+                    <li>Tester les nouvelles fonctionnalités sur un serveur de test</li>
+                    <li>Documenter les changements de configuration</li>
+                    <li>Former les modérateurs aux commandes de base</li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="section">
+            <h2>📞 Support & Maintenance</h2>
+
+            <div class="admin-card">
+                <h3>Planning de Maintenance</h3>
+                <ul>
+                    <li><strong>Quotidien :</strong> Vérifier les logs d'erreur</li>
+                    <li><strong>Hebdomadaire :</strong> Nettoyer les anciens événements</li>
+                    <li><strong>Mensuel :</strong> Analyser les métriques d'usage</li>
+                    <li><strong>Avant tournoi :</strong> Créer l'événement et tester les commandes</li>
+                </ul>
+            </div>
+
+            <div class="info">
+                <strong>Contacts Utiles :</strong>
+                <ul>
+                    <li>Documentation Supabase : https://supabase.com/docs</li>
+                    <li>Documentation Fly.io : https://fly.io/docs</li>
+                    <li>Discord Developer Portal : https://discord.com/developers</li>
+                </ul>
+            </div>
+        </div>
+
+        <a href="../README.md" class="back-link">← Retour au README</a>
+    </div>
+</body>
+</html> 

@@ -1,0 +1,338 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Guide Admin Tournois - Scooty Bot MTG</title>
+    <style>
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            line-height: 1.6;
+            margin: 0;
+            padding: 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        .container {
+            max-width: 1000px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+            color: white;
+            padding: 40px;
+            text-align: center;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 2.5em;
+            font-weight: 300;
+        }
+        .header p {
+            margin: 10px 0 0 0;
+            opacity: 0.9;
+            font-size: 1.1em;
+        }
+        .content {
+            padding: 40px;
+        }
+        .section {
+            margin-bottom: 40px;
+            border-left: 4px solid #3498db;
+            padding-left: 20px;
+        }
+        .section h2 {
+            color: #2c3e50;
+            font-size: 1.8em;
+            margin-bottom: 20px;
+        }
+        .section h3 {
+            color: #34495e;
+            font-size: 1.3em;
+            margin-top: 25px;
+            margin-bottom: 15px;
+        }
+        .command {
+            background: #f8f9fa;
+            border: 1px solid #e9ecef;
+            border-radius: 8px;
+            padding: 20px;
+            margin: 15px 0;
+            font-family: 'Monaco', 'Consolas', monospace;
+        }
+        .command-title {
+            font-weight: bold;
+            color: #e74c3c;
+            font-size: 1.1em;
+            margin-bottom: 10px;
+        }
+        .command-desc {
+            color: #666;
+            margin-bottom: 10px;
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+        }
+        .command-example {
+            background: #2c3e50;
+            color: #ecf0f1;
+            padding: 10px;
+            border-radius: 5px;
+            margin-top: 10px;
+            font-size: 0.9em;
+        }
+        .warning {
+            background: #fff3cd;
+            border: 1px solid #ffeaa7;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+            color: #856404;
+        }
+        .success {
+            background: #d4edda;
+            border: 1px solid #c3e6cb;
+            border-radius: 8px;
+            padding: 15px;
+            margin: 15px 0;
+            color: #155724;
+        }
+        .step {
+            background: #f8f9fa;
+            border-left: 4px solid #28a745;
+            padding: 15px;
+            margin: 10px 0;
+        }
+        .step-number {
+            background: #28a745;
+            color: white;
+            border-radius: 50%;
+            width: 25px;
+            height: 25px;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            margin-right: 10px;
+            font-weight: bold;
+        }
+        .params {
+            background: #e8f4fd;
+            border: 1px solid #bee5eb;
+            border-radius: 5px;
+            padding: 10px;
+            margin: 10px 0;
+        }
+        .param {
+            margin: 5px 0;
+            font-family: 'Monaco', 'Consolas', monospace;
+            font-size: 0.9em;
+        }
+        .required {
+            color: #e74c3c;
+            font-weight: bold;
+        }
+        .optional {
+            color: #6c757d;
+        }
+        ul, ol {
+            margin: 15px 0;
+            padding-left: 30px;
+        }
+        li {
+            margin: 8px 0;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🛠️ Guide Admin Tournois</h1>
+            <p>Administration complète des tournois MTG avec Scooty Bot</p>
+        </div>
+        
+        <div class="content">
+            <div class="section">
+                <h2>🎯 Vue d'ensemble</h2>
+                <p>Ce guide vous explique comment utiliser les commandes d'administration de Scooty Bot pour gérer les tournois MTG. Les commandes <code>/admin</code> permettent de créer, modifier et gérer les événements de scouting.</p>
+                
+                <div class="warning">
+                    <strong>⚠️ Attention :</strong> Les commandes /admin sont réservées aux administrateurs du serveur Discord. Assurez-vous d'avoir les permissions appropriées.
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>📋 Commandes Disponibles</h2>
+                
+                <h3>🆕 Créer un nouveau tournoi</h3>
+                <div class="command">
+                    <div class="command-title">/admin create-event</div>
+                    <div class="command-desc">Crée un nouveau tournoi pour le scouting</div>
+                    <div class="params">
+                        <div class="param"><span class="required">name</span> : Nom du tournoi (ex: "GP Paris 2024")</div>
+                        <div class="param"><span class="optional">start_date</span> : Date de début (format: YYYY-MM-DD, défaut: aujourd'hui)</div>
+                    </div>
+                    <div class="command-example">
+                        Exemple: /admin create-event name:"GP Paris 2024" start_date:"2024-07-15"
+                    </div>
+                </div>
+
+                <h3>📊 Lister les tournois</h3>
+                <div class="command">
+                    <div class="command-title">/admin list-events</div>
+                    <div class="command-desc">Affiche tous les tournois existants avec leurs statuts</div>
+                    <div class="command-example">
+                        Exemple: /admin list-events
+                    </div>
+                </div>
+
+                <h3>🔄 Changer le statut d'un tournoi</h3>
+                <div class="command">
+                    <div class="command-title">/admin update-event-status</div>
+                    <div class="command-desc">Modifie le statut d'un tournoi (active, completed, cancelled)</div>
+                    <div class="params">
+                        <div class="param"><span class="required">event_id</span> : ID du tournoi à modifier</div>
+                        <div class="param"><span class="required">status</span> : Nouveau statut (active/completed/cancelled)</div>
+                    </div>
+                    <div class="command-example">
+                        Exemple: /admin update-event-status event_id:"uuid-du-tournoi" status:"completed"
+                    </div>
+                </div>
+
+                <h3>🗑️ Supprimer des scouts</h3>
+                <div class="command">
+                    <div class="command-title">/admin delete-scout</div>
+                    <div class="command-desc">Supprime un scout spécifique par son ID</div>
+                    <div class="params">
+                        <div class="param"><span class="required">scout_id</span> : ID du scout à supprimer</div>
+                    </div>
+                    <div class="command-example">
+                        Exemple: /admin delete-scout scout_id:"123"
+                    </div>
+                </div>
+
+                <h3>🔧 Initialiser la base de données</h3>
+                <div class="command">
+                    <div class="command-title">/admin init-db</div>
+                    <div class="command-desc">Initialise la base de données et crée un tournoi par défaut</div>
+                    <div class="command-example">
+                        Exemple: /admin init-db
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>🚀 Guide de Démarrage Rapide</h2>
+                
+                <div class="step">
+                    <span class="step-number">1</span>
+                    <strong>Initialiser la base</strong><br>
+                    Utilisez <code>/admin init-db</code> pour créer les tables et un tournoi par défaut.
+                </div>
+
+                <div class="step">
+                    <span class="step-number">2</span>
+                    <strong>Créer votre premier tournoi</strong><br>
+                    Utilisez <code>/admin create-event name:"Mon Tournoi"</code> pour créer un événement.
+                </div>
+
+                <div class="step">
+                    <span class="step-number">3</span>
+                    <strong>Vérifier les événements</strong><br>
+                    Utilisez <code>/admin list-events</code> pour voir tous les tournois.
+                </div>
+
+                <div class="step">
+                    <span class="step-number">4</span>
+                    <strong>Commencer le scouting</strong><br>
+                    Les joueurs peuvent maintenant utiliser <code>/scout</code> pour enregistrer leurs observations.
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>💡 Cas d'Usage Typiques</h2>
+
+                <h3>🎮 Gestion d'un tournoi en cours</h3>
+                <ol>
+                    <li>Créer l'événement avant le tournoi</li>
+                    <li>Les joueurs scoutent pendant les rondes</li>
+                    <li>Utiliser <code>/stats</code> pour suivre l'évolution</li>
+                    <li>Marquer comme "completed" à la fin</li>
+                </ol>
+
+                <h3>🔄 Rotation des tournois</h3>
+                <ol>
+                    <li>Finaliser l'ancien tournoi : <code>/admin update-event-status status:"completed"</code></li>
+                    <li>Créer le nouveau tournoi : <code>/admin create-event</code></li>
+                    <li>Le bot utilisera automatiquement le tournoi actif le plus récent</li>
+                </ol>
+
+                <h3>🧹 Nettoyage des données</h3>
+                <ol>
+                    <li>Identifier les scouts erronés avec <code>/check</code></li>
+                    <li>Supprimer si nécessaire avec <code>/admin delete-scout</code></li>
+                    <li>Surveiller avec <code>/admin list-events</code></li>
+                </ol>
+            </div>
+
+            <div class="section">
+                <h2>⚡ Statuts des Tournois</h2>
+                
+                <div class="step">
+                    <strong>🟢 active</strong><br>
+                    Le tournoi est en cours, les scouts sont acceptés et comptabilisés dans les statistiques.
+                </div>
+
+                <div class="step">
+                    <strong>✅ completed</strong><br>
+                    Le tournoi est terminé, les données sont conservées mais plus de nouveaux scouts.
+                </div>
+
+                <div class="step">
+                    <strong>❌ cancelled</strong><br>
+                    Le tournoi est annulé, les données sont conservées mais désactivées.
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>🔍 Résolution de Problèmes</h2>
+
+                <h3>❌ "No active tournament found"</h3>
+                <div class="warning">
+                    <strong>Problème :</strong> Aucun tournoi actif trouvé<br>
+                    <strong>Solution :</strong> Utilisez <code>/admin create-event</code> ou <code>/admin init-db</code>
+                </div>
+
+                <h3>❌ "Permission denied"</h3>
+                <div class="warning">
+                    <strong>Problème :</strong> Pas d'autorisation pour les commandes admin<br>
+                    <strong>Solution :</strong> Vérifiez vos permissions Discord ou contactez un administrateur
+                </div>
+
+                <h3>❌ "Database connection failed"</h3>
+                <div class="warning">
+                    <strong>Problème :</strong> Problème de connexion à Supabase<br>
+                    <strong>Solution :</strong> Vérifiez la configuration dans le .env
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>📈 Bonnes Pratiques</h2>
+                <ul>
+                    <li><strong>Nommage :</strong> Utilisez des noms clairs comme "GP Paris 2024 - Day 1"</li>
+                    <li><strong>Timing :</strong> Créez les événements avant le début du tournoi</li>
+                    <li><strong>Archivage :</strong> Marquez les tournois comme "completed" après</li>
+                    <li><strong>Surveillance :</strong> Vérifiez régulièrement avec <code>/admin list-events</code></li>
+                    <li><strong>Sauvegarde :</strong> Les données restent accessibles même après "completed"</li>
+                </ul>
+            </div>
+
+            <div class="success">
+                <strong>✅ Prêt à administrer !</strong><br>
+                Vous avez maintenant toutes les clés pour gérer efficacement vos tournois MTG avec Scooty Bot. Pour toute question, consultez le guide administrateur général ou contactez le support technique.
+            </div>
+        </div>
+    </div>
+</body>
+</html> 

@@ -35,7 +35,7 @@ export async function handleStatsCommand(
     // Send response
     await interaction.reply({ 
       embeds: [embed], 
-      ephemeral: false // Visible to all
+      ephemeral: true // Message privé
     });
 
     // Log the stats request

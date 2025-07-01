@@ -35,6 +35,30 @@ export class DatabaseService {
     }
   }
 
+  async updateScout(scoutId: number, updates: { archetype: string; scout_by: string; comment: string }): Promise<Scout> {
+    try {
+      const { data, error } = await this.client
+        .from('scouts')
+        .update({
+          archetype: updates.archetype,
+          scout_by: updates.scout_by,
+          comment: updates.comment,
+          updated_at: new Date().toISOString()
+        })
+        .eq('id', scoutId)
+        .select()
+        .single();
+
+      if (error) throw error;
+      
+      logger.info(`Scout updated: ID ${scoutId} - ${updates.archetype}`);
+      return data;
+    } catch (error) {
+      logger.error('Error updating scout:', error);
+      throw error;
+    }
+  }
+
   async getScoutsByEvent(eventId: string, limit = 50): Promise<Scout[]> {
     try {
       const { data, error } = await this.client
@@ -239,6 +263,111 @@ export class DatabaseService {
     } catch (error) {
       logger.error('Error searching opponents:', error);
       return [];
+    }
+  }
+
+  // Tournament Event Operations
+  async createTournamentEvent(params: { name: string; start_date: Date; status: string }): Promise<Event> {
+    try {
+      // Si on crée un nouveau tournoi actif, désactiver les autres
+      if (params.status === 'active') {
+        await this.client
+          .from('events')
+          .update({ status: 'completed' })
+          .eq('status', 'active');
+      }
+
+      const event = {
+        name: params.name,
+        start_date: params.start_date.toISOString(),
+        status: params.status
+      };
+
+      const { data, error } = await this.client
+        .from('events')
+        .insert(event)
+        .select()
+        .single();
+
+      if (error) throw error;
+      
+      logger.info(`Tournament event created: ${params.name}`);
+      return data;
+    } catch (error) {
+      logger.error('Error creating tournament event:', error);
+      throw error;
+    }
+  }
+
+  // Get all events
+  async getAllEvents(): Promise<Event[]> {
+    try {
+      const { data, error } = await this.client
+        .from('events')
+        .select('*')
+        .order('created_at', { ascending: false });
+
+      if (error) throw error;
+      return data || [];
+    } catch (error) {
+      logger.error('Error fetching all events:', error);
+      return [];
+    }
+  }
+
+  // Update event status
+  async updateEventStatus(eventId: string, status: string): Promise<void> {
+    try {
+      const { error } = await this.client
+        .from('events')
+        .update({ status })
+        .eq('id', eventId);
+
+      if (error) throw error;
+      
+      logger.info(`Event ${eventId} status updated to: ${status}`);
+    } catch (error) {
+      logger.error('Error updating event status:', error);
+      throw error;
+    }
+  }
+
+  // Delete scout
+  async deleteScout(scoutId: number): Promise<void> {
+    try {
+      const { error } = await this.client
+        .from('scouts')
+        .delete()
+        .eq('id', scoutId);
+
+      if (error) throw error;
+      
+      logger.info(`Scout ${scoutId} deleted`);
+    } catch (error) {
+      logger.error('Error deleting scout:', error);
+      throw error;
+    }
+  }
+
+  // Initialize database with default event if none exists
+  async initializeDatabase(): Promise<void> {
+    try {
+      const currentEvent = await this.getCurrentEvent();
+      
+      if (!currentEvent) {
+        logger.info('No active event found, creating default tournament...');
+        await this.createTournamentEvent({
+          name: 'Default Tournament',
+          start_date: new Date(),
+          status: 'active'
+        });
+        logger.info('✅ Default tournament created successfully');
+      } else {
+        logger.info(`✅ Active tournament found: ${currentEvent.name}`);
+      }
+    } catch (error) {
+      logger.error('Error initializing database:', error);
+      throw error;
     }
   }
 } 

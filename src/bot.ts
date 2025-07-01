@@ -143,7 +143,6 @@ async function updateLiveEmbed(): Promise<void> {
     
     const liveData = {
       event_name: currentEvent.name,
-      current_round: currentEvent.current_round,
       recent_scouts: recentScouts,
       stats: stats,
       last_updated: new Date().toLocaleTimeString('fr-FR')
@@ -189,6 +188,13 @@ client.once(Events.ClientReady, async () => {
   logger.info(`✅ Bot ready as ${client.user?.tag}`);
   
   try {
+    // Initialize database with default event if needed
+    try {
+      await database.initializeDatabase();
+    } catch (error) {
+      logger.error('Database initialization failed:', error);
+    }
+    
     // Try to connect to cache (optional)
     try {
       await cache.connect();

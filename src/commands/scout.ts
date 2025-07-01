@@ -119,23 +119,36 @@ export async function handleScoutCommand(
 
     // Check for existing scout
     const existingScout = await database.checkDuplicateScout(opponent, currentEvent.id);
-    const isDuplicate = !!existingScout;
+    
+    let scout: any;
+    let isDuplicate = false;
 
-    // Create scout record
-    const scout = await database.createScout({
-      event_id: currentEvent.id,
-      round: currentEvent.current_round,
-      opponent,
-      archetype,
-      scout_by: username,
-      comment: comment ?? ''
-    });
+    if (existingScout) {
+      // Scout exists - update it instead of creating a duplicate
+      isDuplicate = true;
+      scout = await database.updateScout(existingScout.id, {
+        archetype,
+        scout_by: username,
+        comment: comment ?? ''
+      });
+      logger.info(`Scout updated by ${username}: ${opponent} - ${archetype} (was: ${existingScout.archetype})`);
+    } else {
+      // Create new scout record
+      scout = await database.createScout({
+        event_id: currentEvent.id,
+        opponent,
+        archetype,
+        scout_by: username,
+        comment: comment ?? ''
+      });
+      logger.info(`Scout recorded by ${username}: ${opponent} - ${archetype}`);
+    }
 
     // Invalidate cache
     await cache.invalidateScoutCache(currentEvent.id);
 
     // Create response embed
-    const embed = embedService.createScoutEmbed(scout, isDuplicate);
+    const embed = embedService.createScoutEmbed(scout, isDuplicate, existingScout);
 
     // Send response
     await interaction.reply({ 
@@ -143,30 +156,23 @@ export async function handleScoutCommand(
       ephemeral: true 
     });
 
-    // Log the scout
-    logger.info(`Scout recorded by ${username}: ${opponent} - ${archetype}`, {
-      event: currentEvent.name,
-      round: currentEvent.current_round,
-      duplicate: isDuplicate
-    });
-
-    // Send to admin channel if duplicate
+    // Send to admin channel if updated
     if (isDuplicate && existingScout) {
       const adminChannelId = process.env.ADMIN_CHANNEL_ID;
       if (adminChannelId) {
         const adminChannel = await interaction.client.channels.fetch(adminChannelId);
         if (adminChannel && 'send' in adminChannel && typeof adminChannel.send === 'function') {
-          const conflictEmbed = new EmbedBuilder()
-            .setTitle('⚠️ Scout Conflict Detected')
-            .setDescription(`**${opponent}** was reported with different archetypes:`)
+          const updateEmbed = new EmbedBuilder()
+            .setTitle('🔄 Scout Updated')
+            .setDescription(`**${opponent}** information was updated:`)
             .addFields(
               { name: 'Previous Report', value: `${existingScout.archetype} (by ${existingScout.scout_by})`, inline: true },
-              { name: 'New Report', value: `${archetype} (by ${username})`, inline: true }
+              { name: 'Updated Report', value: `${archetype} (by ${username})`, inline: true }
             )
             .setColor('#FFA500')
             .setTimestamp();
 
-          await adminChannel.send({ embeds: [conflictEmbed] });
+          await adminChannel.send({ embeds: [updateEmbed] });
         }
       }
     }

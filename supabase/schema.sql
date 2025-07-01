@@ -21,39 +21,43 @@ CREATE TABLE IF NOT EXISTS events (
   start_date TIMESTAMP WITH TIME ZONE NOT NULL,
   end_date TIMESTAMP WITH TIME ZONE,
   status TEXT DEFAULT 'active' CHECK (status IN ('active', 'completed', 'cancelled')),
-  current_round INTEGER DEFAULT 1,
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
   updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
 CREATE TABLE IF NOT EXISTS scouts (
   id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
-  event_id UUID NOT NULL REFERENCES events(id) ON DELETE CASCADE,
-  round INTEGER DEFAULT 1,
+  event_id UUID REFERENCES events(id) ON DELETE CASCADE,
   opponent TEXT NOT NULL,
   archetype TEXT NOT NULL,
   scout_by TEXT NOT NULL,
-  comment TEXT,
+  comment TEXT DEFAULT '',
   created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
   updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
--- Create indexes for performance
+-- Create indexes for better performance
 CREATE INDEX IF NOT EXISTS idx_scouts_event_id ON scouts(event_id);
 CREATE INDEX IF NOT EXISTS idx_scouts_opponent ON scouts(opponent);
-CREATE INDEX IF NOT EXISTS idx_scouts_created_at ON scouts(created_at DESC);
 CREATE INDEX IF NOT EXISTS idx_scouts_archetype ON scouts(archetype);
+CREATE INDEX IF NOT EXISTS idx_scouts_scout_by ON scouts(scout_by);
+CREATE INDEX IF NOT EXISTS idx_scouts_created_at ON scouts(created_at DESC);
 CREATE INDEX IF NOT EXISTS idx_events_status ON events(status);
-CREATE INDEX IF NOT EXISTS idx_archetypes_active ON archetypes(active);
+CREATE INDEX IF NOT EXISTS idx_events_start_date ON events(start_date DESC);
 
--- Create updated_at trigger function
+-- Create function for updating updated_at column
 CREATE OR REPLACE FUNCTION update_updated_at_column()
 RETURNS TRIGGER AS $$
 BEGIN
     NEW.updated_at = NOW();
     RETURN NEW;
 END;
-$$ LANGUAGE 'plpgsql';
+$$ language 'plpgsql';
+
+-- Drop existing triggers if they exist
+DROP TRIGGER IF EXISTS update_archetypes_updated_at ON archetypes;
+DROP TRIGGER IF EXISTS update_events_updated_at ON events;
+DROP TRIGGER IF EXISTS update_scouts_updated_at ON scouts;
 
 -- Create triggers for updated_at
 CREATE TRIGGER update_archetypes_updated_at BEFORE UPDATE ON archetypes
@@ -76,10 +80,36 @@ INSERT INTO archetypes (name, emoji, color) VALUES
   ('other', '❓', '#808080')
 ON CONFLICT (name) DO NOTHING;
 
--- Create a default event
-INSERT INTO events (name, start_date, status) VALUES
-  ('Default Tournament', NOW(), 'active')
-ON CONFLICT DO NOTHING;
+-- Create policies for Row Level Security (RLS)
+-- Note: RLS is disabled by default, enable with: ALTER TABLE table_name ENABLE ROW LEVEL SECURITY;
+
+-- Create policies for select access (public read)
+CREATE POLICY IF NOT EXISTS "Allow public read access to archetypes" ON archetypes
+  FOR SELECT USING (true);
+
+CREATE POLICY IF NOT EXISTS "Allow public read access to events" ON events
+  FOR SELECT USING (true);
+
+CREATE POLICY IF NOT EXISTS "Allow public read access to scouts" ON scouts
+  FOR SELECT USING (true);
+
+-- Create policies for insert access (authenticated users can insert scouts)
+CREATE POLICY IF NOT EXISTS "Allow authenticated users to insert scouts" ON scouts
+  FOR INSERT WITH CHECK (true);
+
+-- Create policies for insert access to events (for bot admin commands)
+CREATE POLICY IF NOT EXISTS "Allow insert access to events" ON events
+  FOR INSERT WITH CHECK (true);
+
+-- Create policies for update access (only for events and archetypes by admins)
+CREATE POLICY IF NOT EXISTS "Allow update access to events" ON events
+  FOR UPDATE USING (true);
+
+CREATE POLICY IF NOT EXISTS "Allow update access to scouts" ON scouts
+  FOR UPDATE USING (true);
+
+CREATE POLICY IF NOT EXISTS "Allow delete access to scouts" ON scouts
+  FOR DELETE USING (true);
 
 -- Create views for common queries
 CREATE OR REPLACE VIEW scout_stats AS
@@ -125,63 +155,4 @@ RETURNS TABLE(
 ) AS $$
   SELECT total_scouts, unique_opponents, unique_scouts, avg_scouts_per_user 
   FROM scout_stats WHERE event_id = event_uuid;
-$$ LANGUAGE SQL;
-
--- Enable Row Level Security (RLS)
-ALTER TABLE archetypes ENABLE ROW LEVEL SECURITY;
-ALTER TABLE events ENABLE ROW LEVEL SECURITY;
-ALTER TABLE scouts ENABLE ROW LEVEL SECURITY;
-
--- Create policies for read access (public read)
-CREATE POLICY "Allow public read access to archetypes" ON archetypes
-  FOR SELECT USING (true);
-
-CREATE POLICY "Allow public read access to events" ON events
-  FOR SELECT USING (true);
-
-CREATE POLICY "Allow public read access to scouts" ON scouts
-  FOR SELECT USING (true);
-
--- Create policies for insert access (authenticated users can insert scouts)
-CREATE POLICY "Allow authenticated users to insert scouts" ON scouts
-  FOR INSERT WITH CHECK (true);
-
--- Create policies for update access (only for events and archetypes by admins)
-CREATE POLICY "Allow admin update access to events" ON events
-  FOR UPDATE USING (true);
-
-CREATE POLICY "Allow admin update access to archetypes" ON archetypes
-  FOR UPDATE USING (true);
-
--- Create a function to check for duplicate scouts
-CREATE OR REPLACE FUNCTION check_duplicate_scout(
-  p_opponent TEXT,
-  p_event_id UUID
-)
-RETURNS scouts AS $$
-  SELECT * FROM scouts 
-  WHERE opponent = p_opponent 
-    AND event_id = p_event_id 
-  ORDER BY created_at DESC 
-  LIMIT 1;
-$$ LANGUAGE SQL;
-
--- Create a function to get recent scouts
-CREATE OR REPLACE FUNCTION get_recent_scouts(
-  p_event_id UUID,
-  p_limit INTEGER DEFAULT 20
-)
-RETURNS TABLE(
-  id BIGINT,
-  opponent TEXT,
-  archetype TEXT,
-  scout_by TEXT,
-  comment TEXT,
-  created_at TIMESTAMP WITH TIME ZONE
-) AS $$
-  SELECT id, opponent, archetype, scout_by, comment, created_at
-  FROM scouts
-  WHERE event_id = p_event_id
-  ORDER BY created_at DESC
-  LIMIT p_limit;
 $$ LANGUAGE SQL; 

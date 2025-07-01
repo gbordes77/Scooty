@@ -23,9 +23,9 @@ export class EmbedService {
   };
 
   // Create scout confirmation embed
-  createScoutEmbed(scout: Scout, isDuplicate: boolean = false): EmbedBuilder {
+  createScoutEmbed(scout: Scout, isDuplicate: boolean = false, existingScout?: Scout | null): EmbedBuilder {
     const embed = new EmbedBuilder()
-      .setTitle(isDuplicate ? '⚠️ Scout Updated' : '✅ Scout Recorded')
+      .setTitle(isDuplicate ? '🔄 Scout Updated' : '✅ Scout Recorded')
       .setColor(isDuplicate ? '#FFA500' : '#00FF00')
       .setTimestamp()
       .setFooter({ text: 'MTG Scout Bot' });
@@ -40,8 +40,8 @@ export class EmbedService {
       embed.addFields({ name: '📝 Notes', value: scout.comment, inline: false });
     }
 
-    if (isDuplicate) {
-      embed.setDescription('This opponent was already scouted. Your report has been added as additional information.');
+    if (isDuplicate && existingScout) {
+      embed.setDescription(`Previous scout updated:\n**Before:** ${this.archetypeEmojis[existingScout.archetype] || '❓'} ${existingScout.archetype} (by ${existingScout.scout_by})\n**Now:** ${this.archetypeEmojis[scout.archetype] || '❓'} ${scout.archetype} (by ${scout.scout_by})`);
     }
 
     return embed;
@@ -51,7 +51,7 @@ export class EmbedService {
   createLiveEmbed(data: LiveEmbedData): EmbedBuilder {
     const embed = new EmbedBuilder()
       .setTitle(`🎯 Live Scouting Feed - ${data.event_name}`)
-      .setDescription(`**Round ${data.current_round}** • Last updated: ${data.last_updated}`)
+      .setDescription(`Last updated: ${data.last_updated}`)
       .setColor('#1E90FF')
       .setTimestamp()
       .setFooter({ text: 'MTG Scout Bot • Live Feed' });

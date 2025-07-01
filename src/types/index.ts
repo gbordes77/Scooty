@@ -1,7 +1,6 @@
 export interface Scout {
   id: number;
   event_id: string;
-  round: number;
   opponent: string;
   archetype: string;
   scout_by: string;
@@ -23,7 +22,6 @@ export interface Event {
   start_date: string;
   end_date?: string;
   status: 'active' | 'completed' | 'cancelled';
-  current_round: number;
 }
 
 export interface ScoutStats {
@@ -60,7 +58,6 @@ export interface DiscordInteraction {
 
 export interface LiveEmbedData {
   event_name: string;
-  current_round: number;
   recent_scouts: Scout[];
   stats: ScoutStats;
   last_updated: string;

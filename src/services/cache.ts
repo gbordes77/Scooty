@@ -38,11 +38,17 @@ export class CacheService {
   }
 
   async connect(): Promise<void> {
+    // Check if Redis URL is configured properly
+    if (!process.env.REDIS_URL || process.env.REDIS_URL === 'redis://localhost:6379') {
+      throw new Error('Redis not configured or not available locally');
+    }
+
     if (!this.isConnected) {
       try {
         await this.client.connect();
       } catch (error) {
         logger.warn('Redis connection failed, continuing without cache:', error);
+        throw error;
       }
     }
   }

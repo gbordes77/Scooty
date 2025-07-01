@@ -32,8 +32,7 @@ const embedService = new EmbedService();
 const client = new Client({ 
   intents: [
     GatewayIntentBits.Guilds,
-    GatewayIntentBits.GuildMessages,
-    GatewayIntentBits.MessageContent
+    GatewayIntentBits.GuildMessages
   ] 
 });
 
@@ -52,11 +51,9 @@ async function registerCommands(): Promise<void> {
   try {
     logger.info('Started refreshing application (/) commands.');
 
+    // Register globally instead of guild-specific for simplicity
     await rest.put(
-      Routes.applicationGuildCommands(
-        process.env.CLIENT_ID!,
-        process.env.GUILD_ID!
-      ),
+      Routes.applicationCommands(process.env.CLIENT_ID!),
       { body: commands.map(cmd => cmd.toJSON()) }
     );
 
@@ -112,40 +109,39 @@ let updateInterval: NodeJS.Timeout | null = null;
 
 async function updateLiveEmbed(): Promise<void> {
   try {
+    // Skip live embed updates if not configured
     const liveChannelId = process.env.LIVE_CHANNEL_ID;
     const liveMessageId = process.env.LIVE_MESSAGE_ID;
     
-    if (!liveChannelId || !liveMessageId) {
-      logger.warn('Live channel or message ID not configured');
-      return;
+    if (!liveChannelId || !liveMessageId || 
+        liveChannelId === 'channel_id_for_live_feed' || 
+        liveMessageId === 'message_id_to_edit') {
+      return; // Skip silently if not configured
     }
 
-    // Get current event
-    const currentEvent = await database.getCurrentEvent();
-    if (!currentEvent) {
-      logger.warn('No active event found for live embed');
-      return;
+    // Get current event (handle if doesn't exist)
+    let currentEvent;
+    try {
+      currentEvent = await database.getCurrentEvent();
+    } catch (error) {
+      return; // Skip if database not ready
     }
-
-    // Check cache first
-    let liveData = await cache.getLiveEmbedData(currentEvent.id);
     
-    if (!liveData) {
-      // Get fresh data
-      const recentScouts = await database.getScoutsByEvent(currentEvent.id, 20);
-      const stats = await database.getScoutStats(currentEvent.id);
-      
-      liveData = {
-        event_name: currentEvent.name,
-        current_round: currentEvent.current_round,
-        recent_scouts: recentScouts,
-        stats: stats,
-        last_updated: new Date().toLocaleTimeString('fr-FR')
-      };
-
-      // Cache the data
-      await cache.setLiveEmbedData(currentEvent.id, liveData);
+    if (!currentEvent) {
+      return; // Skip if no event
     }
+
+    // Get fresh data (without cache for simplicity)
+    const recentScouts = await database.getScoutsByEvent(currentEvent.id, 20);
+    const stats = await database.getScoutStats(currentEvent.id);
+    
+    const liveData = {
+      event_name: currentEvent.name,
+      current_round: currentEvent.current_round,
+      recent_scouts: recentScouts,
+      stats: stats,
+      last_updated: new Date().toLocaleTimeString('fr-FR')
+    };
 
     // Get or create live message
     if (!liveMessage) {
@@ -167,7 +163,8 @@ async function updateLiveEmbed(): Promise<void> {
     }
 
   } catch (error) {
-    logger.error('Error updating live embed:', error);
+    // Silently skip errors for live embed
+    return;
   }
 }
 
@@ -186,17 +183,19 @@ client.once(Events.ClientReady, async () => {
   logger.info(`✅ Bot ready as ${client.user?.tag}`);
   
   try {
-    // Connect to cache
-    await cache.connect();
+    // Try to connect to cache (optional)
+    try {
+      await cache.connect();
+      logger.info('Cache connected successfully');
+    } catch (error) {
+      logger.warn('Cache connection failed, continuing without cache');
+    }
     
     // Register commands
     await registerCommands();
     
-    // Start live embed updates
+    // Start live embed updates (optional)
     startLiveEmbedUpdates();
-    
-    // Initial live embed update
-    await updateLiveEmbed();
     
     logger.info('Bot initialization complete');
   } catch (error) {

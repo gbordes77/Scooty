@@ -6,36 +6,36 @@ CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
 -- Create tables
 CREATE TABLE IF NOT EXISTS archetypes (
-  id SERIAL PRIMARY KEY,
-  name VARCHAR(100) UNIQUE NOT NULL,
-  emoji VARCHAR(10),
-  color VARCHAR(20),
+  id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
+  name TEXT UNIQUE NOT NULL,
+  emoji TEXT,
+  color TEXT,
   active BOOLEAN DEFAULT true,
-  created_at TIMESTAMP DEFAULT NOW(),
-  updated_at TIMESTAMP DEFAULT NOW()
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
 CREATE TABLE IF NOT EXISTS events (
   id UUID PRIMARY KEY DEFAULT uuid_generate_v4(),
-  name VARCHAR(200) NOT NULL,
-  start_date TIMESTAMP NOT NULL,
-  end_date TIMESTAMP,
-  status VARCHAR(20) DEFAULT 'active' CHECK (status IN ('active', 'completed', 'cancelled')),
+  name TEXT NOT NULL,
+  start_date TIMESTAMP WITH TIME ZONE NOT NULL,
+  end_date TIMESTAMP WITH TIME ZONE,
+  status TEXT DEFAULT 'active' CHECK (status IN ('active', 'completed', 'cancelled')),
   current_round INTEGER DEFAULT 1,
-  created_at TIMESTAMP DEFAULT NOW(),
-  updated_at TIMESTAMP DEFAULT NOW()
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
 CREATE TABLE IF NOT EXISTS scouts (
-  id SERIAL PRIMARY KEY,
+  id BIGINT PRIMARY KEY GENERATED ALWAYS AS IDENTITY,
   event_id UUID NOT NULL REFERENCES events(id) ON DELETE CASCADE,
   round INTEGER DEFAULT 1,
-  opponent VARCHAR(100) NOT NULL,
-  archetype VARCHAR(50) NOT NULL,
-  scout_by VARCHAR(100) NOT NULL,
+  opponent TEXT NOT NULL,
+  archetype TEXT NOT NULL,
+  scout_by TEXT NOT NULL,
   comment TEXT,
-  created_at TIMESTAMP DEFAULT NOW(),
-  updated_at TIMESTAMP DEFAULT NOW()
+  created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
+  updated_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
 -- Create indexes for performance
@@ -53,7 +53,7 @@ BEGIN
     NEW.updated_at = NOW();
     RETURN NEW;
 END;
-$$ language 'plpgsql';
+$$ LANGUAGE 'plpgsql';
 
 -- Create triggers for updated_at
 CREATE TRIGGER update_archetypes_updated_at BEFORE UPDATE ON archetypes
@@ -84,28 +84,28 @@ ON CONFLICT DO NOTHING;
 -- Create views for common queries
 CREATE OR REPLACE VIEW scout_stats AS
 SELECT 
-  event_id,
-  COUNT(*) as total_scouts,
-  COUNT(DISTINCT opponent) as unique_opponents,
-  COUNT(DISTINCT scout_by) as unique_scouts,
-  ROUND(AVG(scouts_per_user), 2) as avg_scouts_per_user
+  user_stats.event_id,
+  COUNT(*) AS total_scouts,
+  COUNT(DISTINCT scouts.opponent) AS unique_opponents,
+  COUNT(DISTINCT user_stats.scout_by) AS unique_scouts,
+  ROUND(AVG(user_stats.scouts_per_user::numeric), 2) AS avg_scouts_per_user
 FROM (
   SELECT 
     event_id,
     scout_by,
-    COUNT(*) as scouts_per_user
+    COUNT(*) AS scouts_per_user
   FROM scouts
   GROUP BY event_id, scout_by
 ) user_stats
-JOIN scouts USING (event_id)
-GROUP BY event_id;
+JOIN scouts ON scouts.event_id = user_stats.event_id
+GROUP BY user_stats.event_id;
 
 CREATE OR REPLACE VIEW archetype_breakdown AS
 SELECT 
   event_id,
   archetype,
-  COUNT(*) as count,
-  ROUND(COUNT(*) * 100.0 / SUM(COUNT(*)) OVER (PARTITION BY event_id), 1) as percentage
+  COUNT(*) AS count,
+  ROUND(COUNT(*) * 100.0 / SUM(COUNT(*)) OVER (PARTITION BY event_id), 1) AS percentage
 FROM scouts
 GROUP BY event_id, archetype
 ORDER BY event_id, count DESC;
@@ -123,7 +123,8 @@ RETURNS TABLE(
   unique_scouts BIGINT,
   avg_scouts_per_user NUMERIC
 ) AS $$
-  SELECT * FROM scout_stats WHERE event_id = event_uuid;
+  SELECT total_scouts, unique_opponents, unique_scouts, avg_scouts_per_user 
+  FROM scout_stats WHERE event_id = event_uuid;
 $$ LANGUAGE SQL;
 
 -- Enable Row Level Security (RLS)
@@ -154,7 +155,7 @@ CREATE POLICY "Allow admin update access to archetypes" ON archetypes
 
 -- Create a function to check for duplicate scouts
 CREATE OR REPLACE FUNCTION check_duplicate_scout(
-  p_opponent VARCHAR,
+  p_opponent TEXT,
   p_event_id UUID
 )
 RETURNS scouts AS $$
@@ -171,12 +172,12 @@ CREATE OR REPLACE FUNCTION get_recent_scouts(
   p_limit INTEGER DEFAULT 20
 )
 RETURNS TABLE(
-  id INTEGER,
-  opponent VARCHAR,
-  archetype VARCHAR,
-  scout_by VARCHAR,
+  id BIGINT,
+  opponent TEXT,
+  archetype TEXT,
+  scout_by TEXT,
   comment TEXT,
-  created_at TIMESTAMP
+  created_at TIMESTAMP WITH TIME ZONE
 ) AS $$
   SELECT id, opponent, archetype, scout_by, comment, created_at
   FROM scouts

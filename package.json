@@ -1,0 +1,47 @@
+{
+  "name": "scout-bot-mtg",
+  "version": "1.0.0",
+  "description": "Discord bot for MTG tournament scouting and deck tracking",
+  "main": "dist/bot.js",
+  "scripts": {
+    "build": "tsc",
+    "start": "node dist/bot.js",
+    "dev": "ts-node src/bot.ts",
+    "test": "jest",
+    "test:watch": "jest --watch",
+    "test:coverage": "jest --coverage",
+    "lint": "eslint src/**/*.ts",
+    "lint:fix": "eslint src/**/*.ts --fix",
+    "format": "prettier --write src/**/*.ts",
+    "deploy": "npm run build && fly deploy",
+    "clean": "rm -rf dist coverage",
+    "prebuild": "npm run clean",
+    "postinstall": "echo 'Installation complete'"
+  },
+  "keywords": ["discord", "bot", "mtg", "scouting", "tournament"],
+  "author": "Guillaume Bordes",
+  "license": "MIT",
+  "dependencies": {
+    "discord.js": "^14.14.1",
+    "@supabase/supabase-js": "^2.39.3",
+    "dotenv": "^16.4.1",
+    "redis": "^4.6.12",
+    "winston": "^3.11.0",
+    "node-cron": "^3.0.3"
+  },
+  "devDependencies": {
+    "@types/node": "^20.11.16",
+    "@types/jest": "^29.5.12",
+    "typescript": "^5.3.3",
+    "ts-node": "^10.9.2",
+    "jest": "^29.7.0",
+    "ts-jest": "^29.1.1",
+    "eslint": "^8.56.0",
+    "@typescript-eslint/eslint-plugin": "^6.20.0",
+    "@typescript-eslint/parser": "^6.20.0",
+    "prettier": "^3.2.4"
+  },
+  "engines": {
+    "node": ">=18.0.0"
+  }
+} 

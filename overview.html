@@ -1,0 +1,278 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scout Bot MTG - Overview</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+        
+        .header {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            padding: 30px;
+            margin-bottom: 30px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+        }
+        
+        .header h1 {
+            color: #4A5568;
+            font-size: 2.5em;
+            margin-bottom: 10px;
+        }
+        
+        .header .subtitle {
+            color: #718096;
+            font-size: 1.2em;
+            font-weight: 300;
+        }
+        
+        .status {
+            background: #48BB78;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 20px;
+            display: inline-block;
+            font-weight: bold;
+            margin-top: 15px;
+        }
+        
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 25px;
+            margin-bottom: 30px;
+        }
+        
+        .card {
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 12px;
+            padding: 25px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            transition: transform 0.3s ease;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .card h3 {
+            color: #2D3748;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+            display: flex;
+            align-items: center;
+        }
+        
+        .card h3::before {
+            content: "🤖";
+            margin-right: 10px;
+            font-size: 1.2em;
+        }
+        
+        .card.features h3::before { content: "⚡"; }
+        .card.architecture h3::before { content: "🏗️"; }
+        .card.commands h3::before { content: "💬"; }
+        .card.database h3::before { content: "🗄️"; }
+        .card.deployment h3::before { content: "🚀"; }
+        
+        .card ul {
+            list-style: none;
+            margin-left: 0;
+        }
+        
+        .card li {
+            padding: 8px 0;
+            border-bottom: 1px solid #E2E8F0;
+            position: relative;
+            padding-left: 25px;
+        }
+        
+        .card li::before {
+            content: "✅";
+            position: absolute;
+            left: 0;
+            top: 8px;
+        }
+        
+        .card li:last-child {
+            border-bottom: none;
+        }
+        
+        .code-snippet {
+            background: #2D3748;
+            color: #E2E8F0;
+            padding: 15px;
+            border-radius: 8px;
+            font-family: 'Courier New', monospace;
+            margin: 10px 0;
+            overflow-x: auto;
+        }
+        
+        .tech-stack {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-top: 15px;
+        }
+        
+        .tech-tag {
+            background: #4299E1;
+            color: white;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.9em;
+            font-weight: 500;
+        }
+        
+        .footer {
+            text-align: center;
+            background: rgba(255, 255, 255, 0.9);
+            border-radius: 12px;
+            padding: 20px;
+            margin-top: 30px;
+        }
+        
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2em;
+            }
+            .grid {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>🎯 Scout Bot MTG</h1>
+            <p class="subtitle">Bot Discord intelligent pour le scouting Magic: The Gathering</p>
+            <div class="status">✅ Opérationnel</div>
+        </div>
+        
+        <div class="grid">
+            <div class="card features">
+                <h3>Fonctionnalités Principales</h3>
+                <ul>
+                    <li>Enregistrement des adversaires et leurs decks</li>
+                    <li>Recherche rapide d'adversaires par pseudo</li>
+                    <li>Gestion des tournois et événements</li>
+                    <li>Messages privés automatiques (ephemeral)</li>
+                    <li>Anti-doublons intelligent</li>
+                    <li>Interface Discord intuitive</li>
+                </ul>
+            </div>
+            
+            <div class="card commands">
+                <h3>Commandes Disponibles</h3>
+                <ul>
+                    <li><strong>/scout</strong> - Enregistrer un adversaire</li>
+                    <li><strong>/check</strong> - Rechercher un adversaire</li>
+                    <li><strong>/stats</strong> - Statistiques du tournoi</li>
+                    <li><strong>/help</strong> - Aide et documentation</li>
+                    <li><strong>/admin create-event</strong> - Créer un tournoi</li>
+                </ul>
+                <div class="code-snippet">
+/scout pseudo:Joueur1 archetype:jund_midrange commentaire:"Joue beaucoup d'anti-aggro"
+                </div>
+            </div>
+            
+            <div class="card architecture">
+                <h3>Architecture Technique</h3>
+                <ul>
+                    <li>Bot Discord.js avec TypeScript</li>
+                    <li>Base de données Supabase PostgreSQL</li>
+                    <li>Cache Redis (optionnel)</li>
+                    <li>Déploiement sur Fly.io</li>
+                    <li>Logs structurés avec Winston</li>
+                    <li>Tests automatisés avec Jest</li>
+                </ul>
+                <div class="tech-stack">
+                    <span class="tech-tag">TypeScript</span>
+                    <span class="tech-tag">Discord.js</span>
+                    <span class="tech-tag">Supabase</span>
+                    <span class="tech-tag">Fly.io</span>
+                    <span class="tech-tag">Node.js</span>
+                </div>
+            </div>
+            
+            <div class="card database">
+                <h3>Base de Données</h3>
+                <ul>
+                    <li><strong>events</strong> - Tournois et événements</li>
+                    <li><strong>scouts</strong> - Adversaires scoutés</li>
+                    <li><strong>archetypes</strong> - Types de decks MTG</li>
+                </ul>
+                <div class="code-snippet">
+Archétypes supportés:
+• jeskai_control • abzan_sorin
+• jund_midrange  • mono_green
+• azorius_tempo  • rakdos_sac
+• other (personnalisé)
+                </div>
+            </div>
+            
+            <div class="card deployment">
+                <h3>Déploiement & Configuration</h3>
+                <ul>
+                    <li>Configuration via variables d'environnement</li>
+                    <li>Script de déploiement automatisé</li>
+                    <li>Monitoring avec health checks</li>
+                    <li>Backup automatique Supabase</li>
+                    <li>SSL/TLS sécurisé</li>
+                </ul>
+                <div class="code-snippet">
+npm run dev    # Développement local
+npm run build  # Build production
+./deploy.sh    # Déploiement Fly.io
+                </div>
+            </div>
+            
+            <div class="card">
+                <h3>Exemple d'Utilisation</h3>
+                <div class="code-snippet">
+1. Créer un tournoi:
+   /admin create-event nom:"Pioneer League"
+
+2. Scouter un adversaire:
+   /scout pseudo:PlayerX archetype:jeskai_control
+
+3. Rechercher avant un match:
+   /check adversaire:PlayerX
+   
+4. Voir les stats:
+   /stats
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer">
+            <h3>🚀 Projet Scout Bot MTG - Version 1.0</h3>
+            <p>Bot Discord entièrement opérationnel pour le scouting Magic: The Gathering</p>
+            <p style="margin-top: 10px; color: #718096;">
+                Développé avec ❤️ par Guillaume Bordes
+            </p>
+        </div>
+    </div>
+</body>
+</html> 

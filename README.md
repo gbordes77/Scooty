@@ -238,6 +238,16 @@ src/__tests__/
 - **Performance** : Latence des commandes
 - **Utilisation** : Nombre de scouts/jour
 
+## 📖 Documentation
+
+- [📋 01. Objectifs & Méthodologie](docs/01_objectif_methodo.html)
+- [⚙️ 02. Documentation Technique](docs/02_documentation_technique.html)  
+- [🏗️ 03. Architecture Système](docs/03_architecture_systeme.html)
+- [👤 04. Guide Utilisateur](docs/04_guide_utilisateur.html)
+- [✅ 05. Checklist Ultime](docs/05_checklist_ultime.html)
+- [🚀 06. Guide de Déploiement](docs/06_guide_deploiement.html)
+- [🚁 07. Comprendre Fly.io](docs/07_comprendre_flyio.html) ⭐ **NOUVEAU**
+
 ### Alertes
 - Bot offline → Discord webhook
 - Erreurs critiques → Admin channel

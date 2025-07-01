@@ -20,6 +20,7 @@ import { scoutCommand, handleScoutAutocomplete, handleScoutCommand } from './com
 import { checkCommand, handleCheckCommand } from './commands/check';
 import { statsCommand, handleStatsCommand } from './commands/stats';
 import { helpCommand, handleHelpCommand } from './commands/help';
+import { adminCommand, handleAdminCommand } from './commands/admin';
 
 // Load environment variables
 dotenv.config();
@@ -42,7 +43,8 @@ const commands = [
   scoutCommand,
   checkCommand,
   statsCommand,
-  helpCommand
+  helpCommand,
+  adminCommand
 ];
 
 // Register slash commands
@@ -89,6 +91,9 @@ client.on(Events.InteractionCreate, async (interaction) => {
           break;
         case 'help':
           await handleHelpCommand(interaction, embedService);
+          break;
+        case 'admin':
+          await handleAdminCommand(interaction, database, embedService);
           break;
         default:
           logger.warn(`Unknown command: ${interaction.commandName}`);

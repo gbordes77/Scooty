@@ -211,6 +211,26 @@ export class EmbedService {
       .setFooter({ text: 'MTG Scout Bot • Error' });
   }
 
+  // Create success embed
+  createSuccessEmbed(title: string, message: string): EmbedBuilder {
+    return new EmbedBuilder()
+      .setTitle(title)
+      .setDescription(message)
+      .setColor('#10B981')
+      .setTimestamp()
+      .setFooter({ text: 'MTG Scout Bot • Success' });
+  }
+
+  // Create info embed
+  createInfoEmbed(title: string, message: string): EmbedBuilder {
+    return new EmbedBuilder()
+      .setTitle(title)
+      .setDescription(message)
+      .setColor('#3B82F6')
+      .setTimestamp()
+      .setFooter({ text: 'MTG Scout Bot • Info' });
+  }
+
   // Create help embed
   createHelpEmbed(): EmbedBuilder {
     const embed = new EmbedBuilder()

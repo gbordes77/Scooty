@@ -1,0 +1,68 @@
+{
+  "archetypes": [
+    {
+      "name": "jeskai_control",
+      "displayName": "Jeskai Control",
+      "emoji": "🔵🔴⚪",
+      "color": "#FFD700",
+      "active": true
+    },
+    {
+      "name": "abzan_sorin",
+      "displayName": "Abzan Sorin",
+      "emoji": "⚪⚫🟢",
+      "color": "#228B22",
+      "active": true
+    },
+    {
+      "name": "jund_midrange",
+      "displayName": "Jund Midrange",
+      "emoji": "⚫🔴🟢",
+      "color": "#8B0000",
+      "active": true
+    },
+    {
+      "name": "mono_green",
+      "displayName": "Mono Green",
+      "emoji": "🟢",
+      "color": "#00FF00",
+      "active": true
+    },
+    {
+      "name": "azorius_tempo",
+      "displayName": "Azorius Tempo",
+      "emoji": "⚪🔵",
+      "color": "#1E90FF",
+      "active": true
+    },
+    {
+      "name": "rakdos_sac",
+      "displayName": "Rakdos Sacrifice",
+      "emoji": "⚫🔴",
+      "color": "#DC143C",
+      "active": true
+    },
+    {
+      "name": "domain_ramp",
+      "displayName": "Domain Ramp",
+      "emoji": "🟢🔵",
+      "color": "#4CAF50",
+      "active": true
+    },
+    {
+      "name": "boros_energy",
+      "displayName": "Boros Energy",
+      "emoji": "🔴⚪",
+      "color": "#FF5722",
+      "active": true
+    },
+    {
+      "name": "other",
+      "displayName": "Other",
+      "emoji": "❓",
+      "color": "#808080",
+      "active": true
+    }
+  ],
+  "lastUpdated": "2025-01-07T09:00:00Z"
+} 

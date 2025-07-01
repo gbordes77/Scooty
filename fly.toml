@@ -31,5 +31,4 @@ primary_region = "cdg"
   cpus = 1
   memory_mb = 512
 
-[deploy]
-  release_command = "npm run build" 
+[deploy] 

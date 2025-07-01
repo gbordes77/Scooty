@@ -9,6 +9,7 @@ import {
   Message
 } from 'discord.js';
 import * as dotenv from 'dotenv';
+import * as http from 'http';
 import { DatabaseService } from './services/database';
 import { CacheService } from './services/cache';
 import { EmbedService } from './services/embed';
@@ -237,6 +238,26 @@ process.on('SIGTERM', async () => {
 // Unhandled promise rejection
 process.on('unhandledRejection', (error) => {
   logger.error('Unhandled promise rejection:', error);
+});
+
+// Create HTTP server for health checks
+const server = http.createServer((req, res) => {
+  if (req.url === '/health') {
+    res.writeHead(200, { 'Content-Type': 'application/json' });
+    res.end(JSON.stringify({ 
+      status: 'ok', 
+      bot: client.isReady() ? 'ready' : 'not ready',
+      timestamp: new Date().toISOString()
+    }));
+  } else {
+    res.writeHead(404, { 'Content-Type': 'text/plain' });
+    res.end('Not Found');
+  }
+});
+
+const port = process.env.PORT || 3000;
+server.listen(port, () => {
+  logger.info(`Health server listening on port ${port}`);
 });
 
 // Start the bot

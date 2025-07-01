@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scooty Bot - Checklist Ultime</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            color: #333;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, #8B5CF6, #A855F7);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 2.5em;
+            font-weight: 300;
+        }
+        .header p {
+            margin: 10px 0 0 0;
+            opacity: 0.9;
+            font-size: 1.1em;
+        }
+        .content {
+            padding: 40px;
+        }
+        .section {
+            margin-bottom: 40px;
+        }
+        .section h2 {
+            color: #8B5CF6;
+            border-bottom: 3px solid #E5E7EB;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+        }
+        .checklist-category {
+            background: linear-gradient(135deg, #F8FAFC, #F1F5F9);
+            border: 2px solid #E2E8F0;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        .checklist-category h3 {
+            color: #6B46C1;
+            margin: 0 0 20px 0;
+            font-size: 1.3em;
+            display: flex;
+            align-items: center;
+        }
+        .category-icon {
+            margin-right: 10px;
+            font-size: 1.5em;
+        }
+        .checklist-item {
+            display: flex;
+            align-items: flex-start;
+            margin: 12px 0;
+            padding: 10px;
+            background: white;
+            border-radius: 8px;
+            border-left: 4px solid #E5E7EB;
+            transition: all 0.3s ease;
+        }
+        .checklist-item:hover {
+            border-left-color: #8B5CF6;
+            box-shadow: 0 2px 8px rgba(139, 92, 246, 0.1);
+        }
+        .checkbox {
+            width: 20px;
+            height: 20px;
+            border: 2px solid #D1D5DB;
+            border-radius: 4px;
+            margin-right: 15px;
+            margin-top: 2px;
+            flex-shrink: 0;
+            position: relative;
+            cursor: pointer;
+        }
+        .checkbox.checked {
+            background: #10B981;
+            border-color: #10B981;
+        }
+        .checkbox.checked::after {
+            content: '✓';
+            color: white;
+            font-weight: bold;
+            position: absolute;
+            top: -2px;
+            left: 3px;
+            font-size: 14px;
+        }
+        .item-content {
+            flex: 1;
+        }
+        .item-title {
+            font-weight: bold;
+            color: #374151;
+            margin-bottom: 5px;
+        }
+        .item-description {
+            color: #6B7280;
+            font-size: 0.9em;
+            line-height: 1.5;
+        }
+        .priority-high {
+            border-left-color: #EF4444;
+        }
+        .priority-medium {
+            border-left-color: #F59E0B;
+        }
+        .priority-low {
+            border-left-color: #10B981;
+        }
+        .status-summary {
+            background: linear-gradient(135deg, #EDE9FE, #DDD6FE);
+            border: 2px solid #C4B5FD;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            text-align: center;
+        }
+        .progress-bar {
+            background: #E5E7EB;
+            height: 20px;
+            border-radius: 10px;
+            overflow: hidden;
+            margin: 15px 0;
+        }
+        .progress-fill {
+            background: linear-gradient(135deg, #10B981, #059669);
+            height: 100%;
+            width: 0%;
+            transition: width 0.5s ease;
+        }
+        .timeline {
+            background: #F0FDF4;
+            border: 2px solid #10B981;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+        }
+        .timeline-item {
+            display: flex;
+            align-items: center;
+            margin: 15px 0;
+        }
+        .timeline-date {
+            background: #10B981;
+            color: white;
+            padding: 5px 15px;
+            border-radius: 20px;
+            font-weight: bold;
+            margin-right: 15px;
+            min-width: 80px;
+            text-align: center;
+            font-size: 0.9em;
+        }
+        .timeline-content {
+            flex: 1;
+        }
+        .final-check {
+            background: linear-gradient(135deg, #FEF3C7, #FDE68A);
+            border: 3px solid #F59E0B;
+            border-radius: 15px;
+            padding: 30px;
+            margin: 30px 0;
+            text-align: center;
+        }
+        .final-check h3 {
+            color: #D97706;
+            font-size: 1.5em;
+            margin-bottom: 20px;
+        }
+        .launch-button {
+            background: linear-gradient(135deg, #10B981, #059669);
+            color: white;
+            padding: 15px 30px;
+            border: none;
+            border-radius: 25px;
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: transform 0.3s ease;
+        }
+        .launch-button:hover {
+            transform: translateY(-2px);
+        }
+        .launch-button:disabled {
+            background: #9CA3AF;
+            cursor: not-allowed;
+            transform: none;
+        }
+    </style>
+    <script>
+        function toggleCheck(element) {
+            element.classList.toggle('checked');
+            updateProgress();
+        }
+        
+        function updateProgress() {
+            const total = document.querySelectorAll('.checkbox').length;
+            const checked = document.querySelectorAll('.checkbox.checked').length;
+            const percentage = Math.round((checked / total) * 100);
+            
+            document.querySelector('.progress-fill').style.width = percentage + '%';
+            document.querySelector('.progress-text').textContent = `${checked}/${total} tâches complétées (${percentage}%)`;
+            
+            const launchButton = document.querySelector('.launch-button');
+            if (percentage === 100) {
+                launchButton.disabled = false;
+                launchButton.textContent = '🚀 LANCER EN PRODUCTION !';
+            } else {
+                launchButton.disabled = true;
+                launchButton.textContent = `🔄 ${100 - percentage}% restant`;
+            }
+        }
+        
+        document.addEventListener('DOMContentLoaded', function() {
+            updateProgress();
+        });
+    </script>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>✅ Checklist Ultime</h1>
+            <p>Scooty Bot MTG - Validation avant mise en production</p>
+        </div>
+
+        <div class="content">
+            <div class="status-summary">
+                <h2>📊 Progression Globale</h2>
+                <div class="progress-bar">
+                    <div class="progress-fill"></div>
+                </div>
+                <p class="progress-text">0/0 tâches complétées (0%)</p>
+            </div>
+
+            <div class="section">
+                <h2>🎯 Objectifs SMART - Validation</h2>
+                
+                <div class="timeline">
+                    <h3>📅 Timeline du Projet</h3>
+                    <div class="timeline-item">
+                        <div class="timeline-date">J+0</div>
+                        <div class="timeline-content">
+                            <strong>Démarrage projet</strong> - Spécifications & architecture
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-date">J+7</div>
+                        <div class="timeline-content">
+                            <strong>Base de données</strong> - Schema, RLS, vues matérialisées
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-date">J+14</div>
+                        <div class="timeline-content">
+                            <strong>Bot en production</strong> - Déploiement Fly.io
+                        </div>
+                    </div>
+                    <div class="timeline-item">
+                        <div class="timeline-date">J+30</div>
+                        <div class="timeline-content">
+                            <strong>Observabilité complète</strong> - Monitoring & alertes
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>🔍 Validation Technique</h2>
+                
+                <div class="checklist-category">
+                    <h3><span class="category-icon">🤖</span>Bot Discord</h3>
+                    
+                    <div class="checklist-item priority-high">
+                        <div class="checkbox" onclick="toggleCheck(this)"></div>
+                        <div class="item-content">
+                            <div class="item-title">Commandes Slash fonctionnelles</div>
+                            <div class="item-description">Toutes les commandes (/scout, /check, /stats, /help) répondent correctement</div>
+                        </div>
+                    </div>
+                    
+                    <div class="checklist-item priority-high">
+                        <div class="checkbox" onclick="toggleCheck(this)"></div>
+                        <div class="item-content">
+                            <div class="item-title">Auto-complétion opérationnelle</div>
+                            <div class="item-description">Les archétypes s'auto-complètent depuis la base de données</div>
+                        </div>
+                    </div>
+                    
+                    <div class="checklist-item priority-medium">
+                        <div class="checkbox" onclick="toggleCheck(this)"></div>
+                        <div class="item-content">
+                            <div class="item-title">Gestion d'erreurs robuste</div>
+                            <div class="item-description">Messages d'erreur clairs, pas de crash sur entrées invalides</div>
+                        </div>
+                    </div>
+                    
+                    <div class="checklist-item priority-medium">
+                        <div class="checkbox" onclick="toggleCheck(this)"></div>
+                        <div class="item-content">
+                            <div class="item-title">Embeds Discord formatés</div>
+                            <div class="item-description">Réponses avec embeds riches et informations structurées</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="checklist-category">
+                    <h3><span class="category-icon">🗄️</span>Base de Données</h3>
+                    
+                    <div class="checklist-item priority-high">
+                        <div class="checkbox" onclick="toggleCheck(this)"></div>
+                        <div class="item-content">
+                            <div class="item-title">Schéma Supabase déployé</div>
+                            <div class="item-description">Tables scouts, events, archetypes créées avec contraintes</div>
+                        </div>
+                    </div>
+                    
+                    <div class="checklist-item priority-high">
+                        <div class="checkbox" onclick="toggleCheck(this)"></div>
+                        <div class="item-content">
+                            <div class="item-title">Row Level Security (RLS) activé</div>
+                            <div class="item-description">Isolation des données par serveur Discord</div>
+                        </div>
+                    </div>
+                    
+                    <div class="checklist-item priority-medium">
+                        <div class="checkbox" onclick="toggleCheck(this)"></div>
+                        <div class="item-content">
+                            <div class="item-title">Index de performance créés</div>
+                            <div class="item-description">Index sur player_name, archetype, created_at</div>
+                        </div>
+                    </div>
+                    
+                    <div class="checklist-item priority-medium">
+                        <div class="checkbox" onclick="toggleCheck(this)"></div>
+                        <div class="item-content">
+                            <div class="item-title">Vues matérialisées opérationnelles</div>
+                            <div class="item-description">Statistiques pré-calculées pour performance</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="checklist-category">
+                    <h3><span class="category-icon">⚡</span>Cache & Performance</h3>
+                    
+                    <div class="checklist-item priority-medium">
+                        <div class="checkbox" onclick="toggleCheck(this)"></div>
+                        <div class="item-content">
+                            <div class="item-title">Redis Cache configuré</div>
+                            <div class="item-description">Cache des requêtes fréquentes avec TTL approprié</div>
+                        </div>
+                    </div>
+                    
+                    <div class="checklist-item priority-medium">
+                        <div class="checkbox" onclick="toggleCheck(this)"></div>
+                        <div class="item-content">
+                            <div class="item-title">Latence < 250ms validée</div>
+                            <div class="item-description">Tests de performance sur toutes les commandes</div>
+                        </div>
+                    </div>
+                    
+                    <div class="checklist-item priority-low">
+                        <div class="checkbox" onclick="toggleCheck(this)"></div>
+                        <div class="item-content">
+                            <div class="item-title">Cache hit ratio > 80%</div>
+                            <div class="item-description">Monitoring du taux de succès du cache</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>🚀 Déploiement & CI/CD</h2>
+                
+                <div class="checklist-category">
+                    <h3><span class="category-icon">☁️</span>Infrastructure</h3>
+                    
+                    <div class="checklist-item priority-high">
+                        <div class="checkbox" onclick="toggleCheck(this)"></div>
+                        <div class="item-content">
+                            <div class="item-title">Déploiement Fly.io réussi</div>
+                            <div class="item-description">Application accessible et fonctionnelle en production</div>
+                        </div>
+                    </div>
+                    
+                    <div class="checklist-item priority-high">
+                        <div class="checkbox" onclick="toggleCheck(this)"></div>
+                        <div class="item-content">
+                            <div class="item-title">Variables d'environnement sécurisées</div>
+                            <div class="item-description">Tokens et secrets configurés via Fly.io secrets</div>
+                        </div>
+                    </div>
+                    
+                    <div class="checklist-item priority-medium">
+                        <div class="checkbox" onclick="toggleCheck(this)"></div>
+                        <div class="item-content">
+                            <div class="item-title">Health checks configurés</div>
+                            <div class="item-description">Endpoint /health répond correctement</div>
+                        </div>
+                    </div>
+                    
+                    <div class="checklist-item priority-medium">
+                        <div class="checkbox" onclick="toggleCheck(this)"></div>
+                        <div class="item-content">
+                            <div class="item-title">Auto-scaling activé</div>
+                            <div class="item-description">Configuration fly.toml pour montée en charge</div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="checklist-category">
+                    <h3><span class="category-icon">🔄</span>CI/CD Pipeline</h3>
+                    
+                    <div class="checklist-item priority-high">
+                        <div class="checkbox" onclick="toggleCheck(this)"></div>
+                        <div class="item-content">
+                            <div class="item-title">GitHub Actions fonctionnel</div>
+                            <div class="item-description">Pipeline de tests, build et déploiement automatique</div>
+                        </div>
+                    </div>
+                    
+                    <div class="checklist-item priority-medium">
+                        <div class="checkbox" onclick="toggleCheck(this)"></div>
+                        <div class="item-content">
+                            <div class="item-title">Tests unitaires passants</div>
+                            <div class="item-description">Coverage > 80% sur les fonctions critiques</div>
+                        </div>
+                    </div>
+                    
+                    <div class="checklist-item priority-medium">
+                        <div class="checkbox" onclick="toggleCheck(this)"></div>
+                        <div class="item-content">
+                            <div class="item-title">Linting & Formatting</div>
+                            <div class="item-description">ESLint et Prettier configurés et appliqués</div>
+                        </div>
+                    </div>
+                    
+                    <div class="checklist-item priority-low">
+                        <div class="checkbox" onclick="toggleCheck(this)"></div>
+                        <div class="item-content">
+                            <div class="item-title">Tests d'intégration</div>
+                            <div class="item-description">Tests end-to-end sur les commandes principales</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>📊 Observabilité & Monitoring</h2>
+                
+                <div class="checklist-category">
+                    <h3><span class="category-icon">📈</span>Logging & Métriques</h3>
+                    
+                    <div class="checklist-item priority-high">
+                        <div class="checkbox" onclick="toggleCheck(this)"></div>
+                        <div class="item-content">
+                            <div class="item-title">Logging structuré JSON</div>
+                            <div class="item-description">Logs formatés avec métadonnées pertinentes</div>
+                        </div>
+                    </div>
+                    
+                    <div class="checklist-item priority-medium">
+                        <div class="checkbox" onclick="toggleCheck(this)"></div>
+                        <div class="item-content">
+                            <div class="item-title">Métriques de performance</div>
+                            <div class="item-description">Latence, throughput, taux d'erreur collectés</div>
+                        </div>
+                    </div>
+                    
+                    <div class="checklist-item priority-medium">
+                        <div class="checkbox" onclick="toggleCheck(this)"></div>
+                        <div class="item-content">
+                            <div class="item-title">Alertes configurées</div>
+                            <div class="item-description">Notifications sur erreurs critiques et performance</div>
+                        </div>
+                    </div>
+                    
+                    <div class="checklist-item priority-low">
+                        <div class="checkbox" onclick="toggleCheck(this)"></div>
+                        <div class="item-content">
+                            <div class="item-title">Dashboard de monitoring</div>
+                            <div class="item-description">Vue d'ensemble des métriques principales</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>📚 Documentation & Formation</h2>
+                
+                <div class="checklist-category">
+                    <h3><span class="category-icon">📖</span>Documentation</h3>
+                    
+                    <div class="checklist-item priority-high">
+                        <div class="checkbox" onclick="toggleCheck(this)"></div>
+                        <div class="item-content">
+                            <div class="item-title">README complet</div>
+                            <div class="item-description">Installation, configuration, utilisation documentées</div>
+                        </div>
+                    </div>
+                    
+                    <div class="checklist-item priority-medium">
+                        <div class="checkbox" onclick="toggleCheck(this)"></div>
+                        <div class="item-content">
+                            <div class="item-title">Guide utilisateur créé</div>
+                            <div class="item-description">Documentation HTML pour les utilisateurs finaux</div>
+                        </div>
+                    </div>
+                    
+                    <div class="checklist-item priority-medium">
+                        <div class="checkbox" onclick="toggleCheck(this)"></div>
+                        <div class="item-content">
+                            <div class="item-title">Documentation technique</div>
+                            <div class="item-description">Architecture, API, base de données documentées</div>
+                        </div>
+                    </div>
+                    
+                    <div class="checklist-item priority-low">
+                        <div class="checkbox" onclick="toggleCheck(this)"></div>
+                        <div class="item-content">
+                            <div class="item-title">Commentaires code</div>
+                            <div class="item-description">Code commenté pour faciliter la maintenance</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>🔒 Sécurité & Conformité</h2>
+                
+                <div class="checklist-category">
+                    <h3><span class="category-icon">🛡️</span>Sécurité</h3>
+                    
+                    <div class="checklist-item priority-high">
+                        <div class="checkbox" onclick="toggleCheck(this)"></div>
+                        <div class="item-content">
+                            <div class="item-title">Secrets sécurisés</div>
+                            <div class="item-description">Aucun token ou mot de passe dans le code source</div>
+                        </div>
+                    </div>
+                    
+                    <div class="checklist-item priority-high">
+                        <div class="checkbox" onclick="toggleCheck(this)"></div>
+                        <div class="item-content">
+                            <div class="item-title">Validation des entrées</div>
+                            <div class="item-description">Sanitisation et validation de tous les inputs utilisateur</div>
+                        </div>
+                    </div>
+                    
+                    <div class="checklist-item priority-medium">
+                        <div class="checkbox" onclick="toggleCheck(this)"></div>
+                        <div class="item-content">
+                            <div class="item-title">Rate limiting implémenté</div>
+                            <div class="item-description">Protection contre le spam et les abus</div>
+                        </div>
+                    </div>
+                    
+                    <div class="checklist-item priority-medium">
+                        <div class="checkbox" onclick="toggleCheck(this)"></div>
+                        <div class="item-content">
+                            <div class="item-title">Audit trail complet</div>
+                            <div class="item-description">Traçabilité de toutes les actions utilisateur</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="final-check">
+                <h3>🎯 Validation Finale</h3>
+                <p>Tous les éléments critiques sont-ils validés ?</p>
+                <button class="launch-button" disabled>🔄 Compléter la checklist</button>
+            </div>
+        </div>
+    </div>
+</body>
+</html> 

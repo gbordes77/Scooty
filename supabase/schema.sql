@@ -1,4 +1,4 @@
--- Scout Bot MTG - Database Schema
+-- Scooty - Database Schema
 -- Supabase PostgreSQL
 
 -- Enable necessary extensions

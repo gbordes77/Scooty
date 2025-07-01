@@ -1,9 +1,9 @@
 #!/bin/bash
 
-# Scout Bot MTG - Quick Start Script
+# Scooty - Quick Start Script
 # Pour le développement local
 
-echo "🎯 Scout Bot MTG - Quick Start"
+echo "🟣 Scooty - Quick Start"
 echo "=============================="
 
 # Check if .env exists
@@ -32,7 +32,7 @@ echo "🔨 Building TypeScript..."
 npm run build
 
 # Start the bot
-echo "🚀 Starting Scout Bot..."
+echo "🚀 Starting Scooty..."
 echo "Press Ctrl+C to stop"
 echo ""
 

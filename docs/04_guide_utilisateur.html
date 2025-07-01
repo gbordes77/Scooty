@@ -1,0 +1,583 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Scooty Bot - Guide Utilisateur</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            margin: 0;
+            padding: 20px;
+            min-height: 100vh;
+            color: #333;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: rgba(255, 255, 255, 0.95);
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+        }
+        .header {
+            background: linear-gradient(135deg, #8B5CF6, #A855F7);
+            color: white;
+            padding: 30px;
+            text-align: center;
+        }
+        .header h1 {
+            margin: 0;
+            font-size: 2.5em;
+            font-weight: 300;
+        }
+        .header p {
+            margin: 10px 0 0 0;
+            opacity: 0.9;
+            font-size: 1.1em;
+        }
+        .content {
+            padding: 40px;
+        }
+        .section {
+            margin-bottom: 40px;
+        }
+        .section h2 {
+            color: #8B5CF6;
+            border-bottom: 3px solid #E5E7EB;
+            padding-bottom: 10px;
+            margin-bottom: 20px;
+            font-size: 1.8em;
+        }
+        .section h3 {
+            color: #6B46C1;
+            margin-top: 25px;
+            margin-bottom: 15px;
+            font-size: 1.3em;
+        }
+        .command-example {
+            background: linear-gradient(135deg, #F3E8FF, #EDE9FE);
+            border: 2px solid #C4B5FD;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 15px 0;
+        }
+        .command-example h4 {
+            color: #6B46C1;
+            margin: 0 0 15px 0;
+            font-size: 1.2em;
+        }
+        .discord-mockup {
+            background: #36393F;
+            color: #DCDDDE;
+            padding: 15px;
+            border-radius: 8px;
+            margin: 10px 0;
+            font-family: 'Whitney', 'Helvetica Neue', Helvetica, Arial, sans-serif;
+            font-size: 0.9em;
+        }
+        .user-input {
+            color: #7289DA;
+            font-weight: bold;
+        }
+        .bot-response {
+            background: #2F3136;
+            border-left: 4px solid #8B5CF6;
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 0 5px 5px 0;
+        }
+        .embed-mockup {
+            background: #2F3136;
+            border-left: 4px solid #8B5CF6;
+            padding: 15px;
+            margin: 10px 0;
+            border-radius: 0 8px 8px 0;
+        }
+        .embed-title {
+            color: #FFFFFF;
+            font-weight: bold;
+            margin-bottom: 10px;
+        }
+        .embed-field {
+            margin: 8px 0;
+        }
+        .embed-field-name {
+            color: #FFFFFF;
+            font-weight: bold;
+            font-size: 0.9em;
+        }
+        .embed-field-value {
+            color: #B9BBBE;
+            margin-left: 10px;
+        }
+        .step-by-step {
+            background: #F0FDF4;
+            border: 2px solid #10B981;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 15px 0;
+        }
+        .step {
+            display: flex;
+            align-items: flex-start;
+            margin: 15px 0;
+        }
+        .step-number {
+            background: #10B981;
+            color: white;
+            width: 30px;
+            height: 30px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: bold;
+            margin-right: 15px;
+            flex-shrink: 0;
+        }
+        .step-content {
+            flex: 1;
+        }
+        .tip-box {
+            background: #FEF3C7;
+            border: 2px solid #F59E0B;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        .tip-box .tip-icon {
+            color: #D97706;
+            font-weight: bold;
+        }
+        .warning-box {
+            background: #FEF2F2;
+            border: 2px solid #EF4444;
+            border-radius: 10px;
+            padding: 15px;
+            margin: 15px 0;
+        }
+        .shortcut-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+        .shortcut-card {
+            background: linear-gradient(135deg, #EDE9FE, #DDD6FE);
+            padding: 15px;
+            border-radius: 8px;
+            border: 1px solid #C4B5FD;
+        }
+        .shortcut-command {
+            font-family: 'Courier New', monospace;
+            background: #1F2937;
+            color: #F9FAFB;
+            padding: 5px 8px;
+            border-radius: 4px;
+            font-size: 0.9em;
+        }
+        ul, ol {
+            line-height: 1.8;
+        }
+        li {
+            margin-bottom: 8px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>👤 Guide Utilisateur</h1>
+            <p>Scooty Bot MTG - Comment utiliser le bot de scouting</p>
+        </div>
+
+        <div class="content">
+            <div class="section">
+                <h2>🚀 Premiers Pas</h2>
+                
+                <div class="step-by-step">
+                    <h3>Configuration Initiale</h3>
+                    
+                    <div class="step">
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            <strong>Inviter le bot</strong><br>
+                            Assurez-vous que Scooty Bot est présent sur votre serveur Discord avec les permissions nécessaires.
+                        </div>
+                    </div>
+                    
+                    <div class="step">
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                            <strong>Vérifier les commandes</strong><br>
+                            Tapez <code>/</code> dans n'importe quel channel pour voir les commandes disponibles de Scooty Bot.
+                        </div>
+                    </div>
+                    
+                    <div class="step">
+                        <div class="step-number">3</div>
+                        <div class="step-content">
+                            <strong>Tester avec /help</strong><br>
+                            Utilisez <code>/help</code> pour afficher le guide d'aide intégré et vous familiariser avec le bot.
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>📝 Commande /scout - Enregistrer un Scouting</h2>
+                
+                <div class="command-example">
+                    <h4>🎯 Utilisation Basique</h4>
+                    <p>La commande principale pour enregistrer vos observations de scouting.</p>
+                    
+                    <div class="discord-mockup">
+                        <div class="user-input">Vous: /scout</div>
+                        <div style="margin: 10px 0; color: #B9BBBE;">
+                            → Auto-complétion des paramètres s'affiche
+                        </div>
+                    </div>
+                    
+                    <h5>Paramètres Requis:</h5>
+                    <ul>
+                        <li><strong>player</strong> - Nom du joueur scouté</li>
+                        <li><strong>archetype</strong> - Deck joué (avec auto-complétion)</li>
+                        <li><strong>result</strong> - Résultat du match (W/L/D)</li>
+                        <li><strong>round</strong> - Numéro de la ronde</li>
+                    </ul>
+                    
+                    <h5>Paramètre Optionnel:</h5>
+                    <ul>
+                        <li><strong>notes</strong> - Commentaires additionnels</li>
+                    </ul>
+                </div>
+
+                <div class="command-example">
+                    <h4>📋 Exemple Complet</h4>
+                    
+                    <div class="discord-mockup">
+                        <div class="user-input">Vous: /scout player:JohnDoe archetype:Burn result:W round:3 notes:Très agressif, sideboard anti-control</div>
+                        
+                        <div class="bot-response">
+                            <div class="embed-mockup">
+                                <div class="embed-title">✅ Scout enregistré avec succès!</div>
+                                <div class="embed-field">
+                                    <div class="embed-field-name">Joueur</div>
+                                    <div class="embed-field-value">JohnDoe</div>
+                                </div>
+                                <div class="embed-field">
+                                    <div class="embed-field-name">Archétype</div>
+                                    <div class="embed-field-value">Burn</div>
+                                </div>
+                                <div class="embed-field">
+                                    <div class="embed-field-name">Résultat</div>
+                                    <div class="embed-field-value">Victoire (W)</div>
+                                </div>
+                                <div class="embed-field">
+                                    <div class="embed-field-name">Ronde</div>
+                                    <div class="embed-field-value">3</div>
+                                </div>
+                                <div class="embed-field">
+                                    <div class="embed-field-name">Notes</div>
+                                    <div class="embed-field-value">Très agressif, sideboard anti-control</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="tip-box">
+                    <span class="tip-icon">💡 Astuce:</span> L'auto-complétion pour les archétypes vous propose les decks les plus populaires du format. Commencez à taper et sélectionnez dans la liste pour plus de cohérence.
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>🔍 Commande /check - Vérifier un Joueur</h2>
+                
+                <div class="command-example">
+                    <h4>🕵️ Recherche d'Historique</h4>
+                    <p>Consultez l'historique complet d'un joueur pour analyser ses habitudes.</p>
+                    
+                    <div class="discord-mockup">
+                        <div class="user-input">Vous: /check player:JohnDoe</div>
+                        
+                        <div class="bot-response">
+                            <div class="embed-mockup">
+                                <div class="embed-title">📊 Historique de JohnDoe</div>
+                                <div class="embed-field">
+                                    <div class="embed-field-name">Matches Total</div>
+                                    <div class="embed-field-value">12 matches</div>
+                                </div>
+                                <div class="embed-field">
+                                    <div class="embed-field-name">Winrate</div>
+                                    <div class="embed-field-value">75% (9W-2L-1D)</div>
+                                </div>
+                                <div class="embed-field">
+                                    <div class="embed-field-name">Archétypes Joués</div>
+                                    <div class="embed-field-value">
+                                        • Burn (8 matches)<br>
+                                        • Prowess (3 matches)<br>
+                                        • Hammer Time (1 match)
+                                    </div>
+                                </div>
+                                <div class="embed-field">
+                                    <div class="embed-field-name">Dernière Activité</div>
+                                    <div class="embed-field-value">Hier, Ronde 5</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="command-example">
+                    <h4>🎯 Recherche par Événement</h4>
+                    
+                    <div class="discord-mockup">
+                        <div class="user-input">Vous: /check player:JohnDoe event:GP Paris 2024</div>
+                        
+                        <div class="bot-response">
+                            <div class="embed-mockup">
+                                <div class="embed-title">📊 JohnDoe - GP Paris 2024</div>
+                                <div class="embed-field">
+                                    <div class="embed-field-name">Performance</div>
+                                    <div class="embed-field-value">6-2-1 (66.7% winrate)</div>
+                                </div>
+                                <div class="embed-field">
+                                    <div class="embed-field-name">Deck Principal</div>
+                                    <div class="embed-field-value">Burn (9 rounds)</div>
+                                </div>
+                                <div class="embed-field">
+                                    <div class="embed-field-name">Matchups</div>
+                                    <div class="embed-field-value">
+                                        vs Control: 2-1<br>
+                                        vs Aggro: 3-0<br>
+                                        vs Midrange: 1-1-1
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>📊 Commande /stats - Statistiques Globales</h2>
+                
+                <div class="command-example">
+                    <h4>📈 Vue d'Ensemble</h4>
+                    
+                    <div class="discord-mockup">
+                        <div class="user-input">Vous: /stats</div>
+                        
+                        <div class="bot-response">
+                            <div class="embed-mockup">
+                                <div class="embed-title">📊 Statistiques Globales</div>
+                                <div class="embed-field">
+                                    <div class="embed-field-name">Activité Récente (7 jours)</div>
+                                    <div class="embed-field-value">
+                                        • 247 scouts enregistrés<br>
+                                        • 89 joueurs uniques<br>
+                                        • 15 événements actifs
+                                    </div>
+                                </div>
+                                <div class="embed-field">
+                                    <div class="embed-field-name">Top Archétypes</div>
+                                    <div class="embed-field-value">
+                                        1. Burn (18.2%)<br>
+                                        2. Prowess (14.7%)<br>
+                                        3. Hammer Time (12.1%)<br>
+                                        4. Control (11.8%)<br>
+                                        5. Tron (9.3%)
+                                    </div>
+                                </div>
+                                <div class="embed-field">
+                                    <div class="embed-field-name">Méta Santé</div>
+                                    <div class="embed-field-value">Diversité: 8.2/10 ✅</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="command-example">
+                    <h4>🎯 Statistiques Filtrées</h4>
+                    
+                    <div class="discord-mockup">
+                        <div class="user-input">Vous: /stats period:month format:Modern</div>
+                        
+                        <div class="bot-response">
+                            <div class="embed-mockup">
+                                <div class="embed-title">📊 Modern - Dernier Mois</div>
+                                <div class="embed-field">
+                                    <div class="embed-field-name">Volume</div>
+                                    <div class="embed-field-value">1,247 matches scoutés</div>
+                                </div>
+                                <div class="embed-field">
+                                    <div class="embed-field-name">Tendances</div>
+                                    <div class="embed-field-value">
+                                        📈 Burn: +5.2%<br>
+                                        📉 Tron: -3.1%<br>
+                                        🔄 Prowess: stable
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>❓ Commande /help - Aide Intégrée</h2>
+                
+                <div class="command-example">
+                    <h4>🆘 Guide Rapide</h4>
+                    
+                    <div class="discord-mockup">
+                        <div class="user-input">Vous: /help</div>
+                        
+                        <div class="bot-response">
+                            <div class="embed-mockup">
+                                <div class="embed-title">🤖 Scooty Bot - Guide d'Utilisation</div>
+                                <div class="embed-field">
+                                    <div class="embed-field-name">Commandes Principales</div>
+                                    <div class="embed-field-value">
+                                        • <strong>/scout</strong> - Enregistrer un scouting<br>
+                                        • <strong>/check</strong> - Vérifier un joueur<br>
+                                        • <strong>/stats</strong> - Voir les statistiques<br>
+                                        • <strong>/help</strong> - Afficher cette aide
+                                    </div>
+                                </div>
+                                <div class="embed-field">
+                                    <div class="embed-field-name">Formats Supportés</div>
+                                    <div class="embed-field-value">Modern, Legacy, Pioneer, Standard</div>
+                                </div>
+                                <div class="embed-field">
+                                    <div class="embed-field-name">Support</div>
+                                    <div class="embed-field-value">
+                                        Besoin d'aide? Contactez les administrateurs<br>
+                                        ou consultez la documentation complète.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>🎯 Conseils d'Utilisation</h2>
+                
+                <div class="shortcut-grid">
+                    <div class="shortcut-card">
+                        <h4>⚡ Scouting Rapide</h4>
+                        <p>Utilisez l'auto-complétion pour saisir rapidement les archétypes courants.</p>
+                        <div class="shortcut-command">/scout player:nom arch[TAB]</div>
+                    </div>
+                    
+                    <div class="shortcut-card">
+                        <h4>🔍 Recherche Efficace</h4>
+                        <p>Recherchez par nom partiel pour trouver rapidement un joueur.</p>
+                        <div class="shortcut-command">/check player:john</div>
+                    </div>
+                    
+                    <div class="shortcut-card">
+                        <h4>📊 Suivi Méta</h4>
+                        <p>Consultez les stats quotidiennes pour suivre l'évolution du méta.</p>
+                        <div class="shortcut-command">/stats period:day</div>
+                    </div>
+                    
+                    <div class="shortcut-card">
+                        <h4>📝 Notes Utiles</h4>
+                        <p>Ajoutez des notes courtes mais descriptives pour plus de contexte.</p>
+                        <div class="shortcut-command">notes:sideboard anti-aggro</div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>⚠️ Bonnes Pratiques</h2>
+                
+                <div class="tip-box">
+                    <span class="tip-icon">✅ À Faire:</span>
+                    <ul>
+                        <li>Soyez cohérent dans la nomenclature des joueurs</li>
+                        <li>Utilisez les archétypes suggérés par l'auto-complétion</li>
+                        <li>Ajoutez des notes pertinentes pour le contexte</li>
+                        <li>Scoutez régulièrement pour maintenir les données à jour</li>
+                    </ul>
+                </div>
+                
+                <div class="warning-box">
+                    <strong>❌ À Éviter:</strong>
+                    <ul>
+                        <li>Ne pas inventer de nouveaux noms d'archétypes</li>
+                        <li>Éviter les abréviations non standard</li>
+                        <li>Ne pas oublier de préciser la ronde</li>
+                        <li>Éviter les notes trop longues ou hors sujet</li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>🔧 Résolution de Problèmes</h2>
+                
+                <h3>Problèmes Courants</h3>
+                
+                <div class="command-example">
+                    <h4>❌ "Commande non reconnue"</h4>
+                    <p><strong>Solution:</strong> Vérifiez que le bot a les permissions nécessaires et que les commandes sont synchronisées.</p>
+                </div>
+                
+                <div class="command-example">
+                    <h4>❌ "Archétype non trouvé"</h4>
+                    <p><strong>Solution:</strong> Utilisez l'auto-complétion ou vérifiez l'orthographe. Les archétypes sont sensibles à la casse.</p>
+                </div>
+                
+                <div class="command-example">
+                    <h4>❌ "Erreur de base de données"</h4>
+                    <p><strong>Solution:</strong> Réessayez dans quelques secondes. Si le problème persiste, contactez un administrateur.</p>
+                </div>
+                
+                <div class="command-example">
+                    <h4>❌ "Joueur non trouvé"</h4>
+                    <p><strong>Solution:</strong> Vérifiez l'orthographe du nom. La recherche est sensible à la casse et aux espaces.</p>
+                </div>
+            </div>
+
+            <div class="section">
+                <h2>📞 Support & Contact</h2>
+                
+                <div class="step-by-step">
+                    <h3>Obtenir de l'Aide</h3>
+                    
+                    <div class="step">
+                        <div class="step-number">1</div>
+                        <div class="step-content">
+                            <strong>Consultez /help</strong><br>
+                            La plupart des questions trouvent réponse dans l'aide intégrée.
+                        </div>
+                    </div>
+                    
+                    <div class="step">
+                        <div class="step-number">2</div>
+                        <div class="step-content">
+                            <strong>Vérifiez ce guide</strong><br>
+                            Relisez les sections pertinentes de ce guide utilisateur.
+                        </div>
+                    </div>
+                    
+                    <div class="step">
+                        <div class="step-number">3</div>
+                        <div class="step-content">
+                            <strong>Contactez les admins</strong><br>
+                            Si le problème persiste, contactez les administrateurs du serveur.
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</body>
+</html> 

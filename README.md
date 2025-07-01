@@ -1,4 +1,4 @@
-# 🎯 Scout Bot MTG
+# 🟣 Scooty
 
 > Bot Discord pour le scouting compétitif Magic: The Gathering
 
@@ -8,7 +8,7 @@
 
 ## 📋 Vue d'ensemble
 
-**Scout Bot MTG** est un bot Discord conçu pour optimiser la collecte et le partage d'informations sur les decks adverses durant les tournois Magic: The Gathering. Il remplace un processus manuel chaotique par un système structuré, instantané et sans friction.
+**Scooty** est un bot Discord conçu pour optimiser la collecte et le partage d'informations sur les decks adverses durant les tournois Magic: The Gathering. Il remplace un processus manuel chaotique par un système structuré, instantané et sans friction.
 
 ### 🎯 Problème résolu
 - **Avant** : Les joueurs écrivent "Opponent X joue Jeskai" dans un channel Discord → information noyée, doublons, pas de recherche
@@ -39,7 +39,7 @@
 ### Stack Technologique
 ```
 ┌─────────────────┐     ┌──────────────┐     ┌──────────────┐
-│  Discord Users  │────▶│  Discord Bot │────▶│   Supabase   │
+│  Discord Users  │────▶│  Scooty      │────▶│   Supabase   │
 │   /scout cmd    │     │  (Node.js)   │     │  (Postgres)  │
 └─────────────────┘     └──────┬───────┘     └──────┬───────┘
                                │                      │
@@ -296,4 +296,4 @@ Ce projet est sous licence MIT. Voir le fichier [LICENSE](LICENSE) pour plus de 
 
 ---
 
-**🎯 Scout Bot MTG** - Optimisez votre scouting, maximisez vos chances de victoire ! 
+**🎯 Scooty** - Optimisez votre scouting, maximisez vos chances de victoire ! 

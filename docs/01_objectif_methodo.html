@@ -1,0 +1,55 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>🟣 Scooty - Objectif & Méthodologie</title>
+  <style>
+    body { font-family: 'Inter', Arial, sans-serif; background: #f8f7ff; color: #2d2d2d; margin: 0; padding: 0; }
+    .container { max-width: 900px; margin: 32px auto; background: #fff; border-radius: 16px; box-shadow: 0 2px 12px #e0e0f7; padding: 32px; }
+    h1 { color: #a259e6; font-size: 2.2em; margin-bottom: 0.2em; }
+    h2 { color: #5f4bb6; border-left: 6px solid #a259e6; padding-left: 12px; margin-top: 2em; }
+    h3 { color: #5f4bb6; margin-top: 1.5em; }
+    .highlight { background: #f3e8ff; border-left: 6px solid #a259e6; padding: 12px 18px; margin: 18px 0; border-radius: 8px; font-size: 1.1em; }
+    ul { margin-left: 1.5em; }
+    .kanban { background: #f8f7ff; border: 1px solid #e0e0f7; border-radius: 8px; padding: 12px; margin: 18px 0; }
+    .done { color: #2ecc40; font-weight: bold; }
+    .todo { color: #e67e22; font-weight: bold; }
+    .inprogress { color: #a259e6; font-weight: bold; }
+    .note { color: #5f4bb6; font-size: 0.98em; }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>🟣 Scooty - Objectif & Méthodologie</h1>
+    <div class="highlight">
+      <b>Priorité MVP :</b> Offrir un bot Discord <b>clé en main</b> pour le scouting compétitif MTG : collecte, partage, visualisation et export des données deck adverses.<br>
+      <b>Dashboard & exports</b> = livrables principaux.<br>
+      <b>API publique</b> = bonus (lecture seule, sécurisée, monitoring, pagination obligatoire).
+    </div>
+    <h2>1. Contexte & Objectifs</h2>
+    <ul>
+      <li>Remplacer le chaos du reporting Discord/Excel par un système instantané, structuré, sans friction.</li>
+      <li>Réduire le temps de saisie à &lt;5s, éliminer les doublons, maximiser la visibilité pour l'équipe.</li>
+      <li>Garantir l'adoption par l'UX (auto-complétion, feedback immédiat, stats live).</li>
+      <li>Permettre l'analyse méta, l'export, la réutilisation des données (multi-tournois, ML, dashboard web).</li>
+    </ul>
+    <h2>2. Méthodologie projet</h2>
+    <ul>
+      <li>Approche <b>full DevOps</b> : CI/CD, tests, monitoring, rollback instantané.</li>
+      <li>Livraison incrémentale : MVP bot Discord, puis dashboard web, puis API publique.</li>
+      <li>Documentation exhaustive, guides utilisateurs, scripts de déploiement automatisés.</li>
+      <li>Stack moderne : Node.js, TypeScript, Discord.js, Supabase, Redis, Fly.io.</li>
+      <li>Respect RGPD, sécurité (RLS, secrets, monitoring, logs structurés).</li>
+    </ul>
+    <h2>3. Livrables attendus</h2>
+    <ul>
+      <li>Bot Discord Scooty opérationnel (slash commands, auto-complétion, stats live).</li>
+      <li>Base de données Supabase prête à l'emploi (RLS, vues, index).</li>
+      <li>Dashboard web (bonus) : visualisation, export, admin.</li>
+      <li>Documentation HTML : objectifs, archi, guides, checklist ultime.</li>
+    </ul>
+    <div class="note">Format et couleurs inspirés du template Metalzyr (violet, lavande, gris clair, vert succès).</div>
+  </div>
+</body>
+</html> 

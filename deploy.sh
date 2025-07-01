@@ -1,11 +1,11 @@
 #!/bin/bash
 
-# Scout Bot MTG - Deployment Script
+# Scooty - Deployment Script
 # One-click deployment to Fly.io
 
 set -e
 
-echo "🚀 Starting Scout Bot MTG deployment..."
+echo "🚀 Starting Scooty deployment..."
 
 # Colors for output
 RED='\033[0;31m'
@@ -101,9 +101,9 @@ deploy_to_fly() {
     print_status "Deploying to Fly.io..."
     
     # Check if app exists
-    if ! flyctl apps list | grep -q "mtg-scout-bot"; then
+    if ! flyctl apps list | grep -q "scooty"; then
         print_status "Creating new Fly.io app..."
-        flyctl launch --name mtg-scout-bot --region cdg --no-deploy
+        flyctl launch --name scooty --region cdg --no-deploy
     fi
     
     # Set secrets
@@ -144,7 +144,7 @@ health_check() {
     sleep 30
     
     # Check if app is responding
-    if curl -f https://mtg-scout-bot.fly.dev/health &> /dev/null; then
+    if curl -f https://scooty.fly.dev/health &> /dev/null; then
         print_success "Health check passed! Bot is online."
     else
         print_warning "Health check failed. Bot might still be starting up."
@@ -153,7 +153,7 @@ health_check() {
 
 # Main deployment flow
 main() {
-    echo "🎯 Scout Bot MTG - Deployment Script"
+    echo "🟣 Scooty - Deployment Script"
     echo "=================================="
     
     check_dependencies
@@ -168,7 +168,7 @@ main() {
     print_success "🎉 Deployment completed successfully!"
     echo ""
     echo "📊 Your bot is now available at:"
-    echo "   https://mtg-scout-bot.fly.dev"
+    echo "   https://scooty.fly.dev"
     echo ""
     echo "🔧 Next steps:"
     echo "   1. Configure your Discord bot token"

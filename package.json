@@ -1,7 +1,7 @@
 {
-  "name": "scout-bot-mtg",
+  "name": "scooty",
   "version": "1.0.0",
-  "description": "Discord bot for MTG tournament scouting and deck tracking",
+  "description": "Scooty - Discord bot for competitive MTG scouting and deck tracking",
   "main": "dist/bot.js",
   "scripts": {
     "build": "tsc",
@@ -18,7 +18,7 @@
     "prebuild": "npm run clean",
     "postinstall": "echo 'Installation complete'"
   },
-  "keywords": ["discord", "bot", "mtg", "scouting", "tournament"],
+  "keywords": ["discord", "bot", "mtg", "scouting", "scooty", "tournament"],
   "author": "Guillaume Bordes",
   "license": "MIT",
   "dependencies": {

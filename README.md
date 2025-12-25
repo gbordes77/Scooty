@@ -2,6 +2,19 @@
 
 > Bot Discord pour le scouting compétitif Magic: The Gathering
 
+## ⏸️ STATUS: EN PAUSE
+
+| État | Détail |
+|------|--------|
+| **Bot Discord** | Arrêté (Fly.io en pause) |
+| **Base de données** | Arrêtée (Supabase désactivé) |
+| **Code** | 100% fonctionnel |
+| **Redémarrage** | ~15 min (réactiver Supabase + Fly.io) |
+
+**Le projet est complet et prêt à être relancé à tout moment.**
+
+---
+
 [![CI/CD](https://github.com/gbordes77/Scooty/actions/workflows/ci.yml/badge.svg)](https://github.com/gbordes77/Scooty/actions/workflows/ci.yml)
 [![Deploy](https://img.shields.io/badge/Deploy-Fly.io-blue)](https://fly.io)
 [![License](https://img.shields.io/badge/License-MIT-green.svg)](LICENSE)
